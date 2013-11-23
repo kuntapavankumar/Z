@@ -3,6 +3,7 @@ package edu.concordia.dpis;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.concordia.dpis.commons.Address;
@@ -16,9 +17,9 @@ public class Replica extends UDPServer implements Node {
 
 	private String leaderName;
 
-//	private boolean isLeaderAlive = false;
+	// private boolean isLeaderAlive = false;
 
-	private List<Node> nodes;
+	private List<Node> nodes = new ArrayList<Node>();
 
 	public Replica(int port) throws UnknownHostException {
 		super(port);

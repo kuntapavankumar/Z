@@ -67,5 +67,4 @@ public class ProxyNode implements Node {
 	public Address getAddress() {
 		return address;
 	}
-
 }
