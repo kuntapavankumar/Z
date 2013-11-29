@@ -3,7 +3,7 @@ package edu.concordia.dpis;
 import java.util.HashMap;
 import java.util.List;
 
-public class StationServerRequestHandler implements RequestHandler {
+public class DefaultRequestHandler implements RequestHandler {
 
 	private HashMap<String, Command> commands = new HashMap<String, Command>();
 
