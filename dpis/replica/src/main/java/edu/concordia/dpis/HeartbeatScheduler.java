@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import edu.concordia.dpis.commons.DeadNodeException;
+
 public class HeartbeatScheduler extends ScheduledThreadPoolExecutor {
 
 	private List<Node> nodes;
@@ -14,25 +16,29 @@ public class HeartbeatScheduler extends ScheduledThreadPoolExecutor {
 	}
 
 	public void start() {
-		this.schedule(new HeartBeatTask(), 1, TimeUnit.SECONDS);
+		this.schedule(new HeartBeatTask(), 5, TimeUnit.SECONDS);
 	}
 
 	class HeartBeatTask implements Runnable {
-
 		@Override
 		public void run() {
-			// check for heartbeat of other nodes,
-			noResponse(null);
+			// check for heart beat of other nodes,
+			
+			try {
+				noResponse(null);
+			} catch (DeadNodeException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	void noResponse(Node node) {
+	void noResponse(Node node) throws DeadNodeException {
 		if (isLeader(node)) {
 			startElection();
 		}
 	}
 
-	private void startElection() {
+	private void startElection() throws DeadNodeException {
 		for (Node node : nodes) {
 			MessageType message = node.election("");
 		}

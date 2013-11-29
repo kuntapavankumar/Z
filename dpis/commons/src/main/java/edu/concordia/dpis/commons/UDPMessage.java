@@ -5,6 +5,7 @@ import java.util.List;
 public class UDPMessage implements Message {
 
 	private String message;
+	
 	private Address toAddress;
 
 	public UDPMessage(String message, String host, int port) {

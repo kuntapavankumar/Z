@@ -6,7 +6,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
 
 import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.UDPMessage;
@@ -15,7 +17,8 @@ public class UDPClient {
 
 	// private static Logger log = Logger.getLogger(UDPClient.class.getName());
 
-	public Message send(Message msg) throws FileNotFoundException, IOException {
+	public Message send(Message msg, int timeout) throws FileNotFoundException,
+			IOException, TimeoutException {
 		String response = null;
 		DatagramSocket aSocket = null;
 		try {
@@ -28,7 +31,14 @@ public class UDPClient {
 			aSocket.send(request);
 			byte[] buffer = new byte[1000];
 			DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-			aSocket.receive(reply);
+			aSocket.setSoTimeout(timeout);
+			try {
+				aSocket.receive(reply);
+			} catch (SocketTimeoutException timeoutException) {
+				System.out.println(timeoutException.getMessage());
+				throw new TimeoutException();
+			}
+
 			response = new String(Arrays.copyOfRange(reply.getData(), 0,
 					reply.getLength()));
 
@@ -44,5 +54,10 @@ public class UDPClient {
 		final Message retMessage = new UDPMessage(response, msg.getToAddress()
 				.getHost(), msg.getToAddress().getPort());
 		return retMessage;
+
+	}
+
+	public Message send(Message msg) throws FileNotFoundException, IOException, TimeoutException {
+		return send(msg, 0);
 	}
 }

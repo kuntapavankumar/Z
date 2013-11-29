@@ -28,7 +28,6 @@ public abstract class UDPServer {
 						DatagramPacket reply = new DatagramPacket(payload,
 								payload.length, request.getAddress(),
 								request.getPort());
-
 						aSocket.send(reply);
 					}
 				} catch (SocketException e) {
