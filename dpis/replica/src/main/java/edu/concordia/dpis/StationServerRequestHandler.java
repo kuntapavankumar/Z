@@ -1,8 +1,11 @@
 package edu.concordia.dpis;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class StationServerRequestHandler implements RequestHandler {
+
+	private HashMap<String, Command> commands = new HashMap<String, Command>();
 
 	@Override
 	public String getOperationName(String message) {
@@ -16,7 +19,11 @@ public class StationServerRequestHandler implements RequestHandler {
 
 	@Override
 	public Object doOperation(String requestMessage) {
-		return null;
+		final Command command = commands.get(getOperationName(requestMessage));
+		return command.execute(getArguments(requestMessage));
 	}
 
+	public void addCommand(String operationName, Command command) {
+		this.commands.put(operationName, command);
+	}
 }

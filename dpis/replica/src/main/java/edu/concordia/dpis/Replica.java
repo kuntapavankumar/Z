@@ -34,6 +34,10 @@ public class Replica extends UDPServer implements Node {
 	private List<Node> nodes = new ArrayList<Node>();
 
 	public Replica(int port) throws UnknownHostException {
+		this(port, false);
+	}
+
+	public Replica(int port, boolean isLeader) throws UnknownHostException {
 		super(port);
 		this.address = new Address(InetAddress.getLocalHost().getHostAddress(),
 				port);
@@ -144,5 +148,4 @@ public class Replica extends UDPServer implements Node {
 	public void setRequestHandler(RequestHandler requestHandler) {
 		this.requestHandler = requestHandler;
 	}
-
 }
