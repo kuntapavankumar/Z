@@ -60,7 +60,8 @@ public class Replica extends UDPServer implements Node {
 
 	@Override
 	protected String getReplyMessage(DatagramPacket request) {
-		return requestHandler.doOperation(request).toString();
+		return requestHandler.doOperation(new String(request.getData()))
+				.toString();
 	}
 
 	@Override
