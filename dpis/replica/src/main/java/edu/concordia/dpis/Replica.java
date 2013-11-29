@@ -25,7 +25,7 @@ public class Replica extends UDPServer implements Node {
 		this.address = new Address(InetAddress.getLocalHost().getHostAddress(),
 				port);
 		this.address.setId(System.currentTimeMillis() + "");
-		new HeartbeatScheduler(nodes) {
+		new HeartbeatScheduler() {
 
 			@Override
 			protected boolean isLeader(String id) {
@@ -36,6 +36,10 @@ public class Replica extends UDPServer implements Node {
 				if (isLeader(node.getAddress().getId())) {
 					election(address.getId());
 				}
+			};
+
+			public List<Node> getNodes() {
+				return nodes;
 			};
 		}.start();
 	}

@@ -6,12 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class HeartbeatScheduler {
 
-	private List<Node> nodes;
-
-	public HeartbeatScheduler(List<Node> nodes) {
-		this.nodes = nodes;
-	}
-
 	public void start() {
 		new ScheduledThreadPoolExecutor(1).schedule(new HeartBeatTask(), 5,
 				TimeUnit.SECONDS);
@@ -20,7 +14,7 @@ public abstract class HeartbeatScheduler {
 	class HeartBeatTask implements Runnable {
 		@Override
 		public void run() {
-			for (Node node : nodes) {
+			for (Node node : getNodes()) {
 				boolean isAlive = node.isAlive();
 				if (!isAlive) {
 					onFailedNode(node);
@@ -28,6 +22,8 @@ public abstract class HeartbeatScheduler {
 			}
 		}
 	}
+
+	protected abstract List<Node> getNodes();
 
 	protected abstract void onFailedNode(Node node);
 
