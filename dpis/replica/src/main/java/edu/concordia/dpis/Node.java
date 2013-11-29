@@ -13,6 +13,6 @@ public interface Node {
 
 	MessageType election(String name) throws DeadNodeException;
 
-	boolean isAlive() throws DeadNodeException;
+	boolean isAlive();
 
 }

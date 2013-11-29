@@ -75,10 +75,14 @@ public class ProxyNode implements Node {
 	}
 
 	@Override
-	public boolean isAlive() throws DeadNodeException {
-		Message msg = sendMessage("isAlive");
-		if (msg != null) {
-			return true;
+	public boolean isAlive() {
+		try {
+			Message msg = sendMessage("isAlive");
+			if (msg != null) {
+				return true;
+			}
+		} catch (DeadNodeException ex) {
+			System.out.println(ex.getMessage());
 		}
 		return false;
 	}

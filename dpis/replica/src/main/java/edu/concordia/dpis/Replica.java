@@ -25,6 +25,19 @@ public class Replica extends UDPServer implements Node {
 		this.address = new Address(InetAddress.getLocalHost().getHostAddress(),
 				port);
 		this.address.setId(System.currentTimeMillis() + "");
+		new HeartbeatScheduler(nodes) {
+
+			@Override
+			protected boolean isLeader(String id) {
+				return id.equals(getLeaderName());
+			}
+
+			protected void onFailedNode(Node node) {
+				if (isLeader(node.getAddress().getId())) {
+					election(address.getId());
+				}
+			};
+		}.start();
 	}
 
 	@Override
