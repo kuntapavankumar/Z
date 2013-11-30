@@ -22,6 +22,10 @@ public class DefaultRequestHandler implements RequestHandler {
 	@Override
 	public Object doOperation(Message request) {
 		final Command command = commands.get(getOperationName(request));
+		if (command == null) {
+			throw new UnsupportedOperationException(getOperationName(request)
+					+ " is not supported");
+		}
 		return command.execute(getArguments(request));
 	}
 

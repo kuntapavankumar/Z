@@ -5,6 +5,6 @@ import edu.concordia.dpis.fifo.RequestResolver;
 
 public interface RequestHandler extends RequestResolver {
 
-	Object doOperation(Message request);
+	Object doOperation(Message request) throws UnsupportedOperationException;
 
 }
