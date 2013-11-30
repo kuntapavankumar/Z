@@ -4,6 +4,7 @@ import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.commons.DeadNodeException;
 import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.ReliableMessage;
+import edu.concordia.dpis.commons.TimeoutException;
 import edu.concordia.dpis.messenger.UDPClient;
 
 public class ProxyNode implements Node {
@@ -12,7 +13,8 @@ public class ProxyNode implements Node {
 
 	private UDPClient udpClient;
 
-	public ProxyNode() {
+	public ProxyNode(Address address) {
+		this.address = address;
 		this.udpClient = new UDPClient();
 	}
 
@@ -32,7 +34,7 @@ public class ProxyNode implements Node {
 		try {
 			fromMessage = this.udpClient.send(toMessage, 1000);
 		} catch (edu.concordia.dpis.commons.TimeoutException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return fromMessage;
 	}
@@ -66,8 +68,9 @@ public class ProxyNode implements Node {
 	@Override
 	public boolean isAlive() {
 		try {
+			System.out.println("checking for aliveness");
 			Message msg = sendMessage("isAlive");
-			if (msg != null) {
+			if (msg != null && msg.getActualMessage() != null) {
 				return true;
 			}
 		} catch (DeadNodeException ex) {

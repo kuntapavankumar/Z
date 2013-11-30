@@ -3,7 +3,6 @@ package edu.concordia.dpis.messenger;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -24,6 +23,8 @@ public abstract class UDPServer {
 			public void run() {
 				try {
 					aSocket = new DatagramSocket(port);
+					System.out.println("UDPServer is up and running on port"
+							+ port);
 					while (true) {
 						byte[] buffer = new byte[1000];
 						DatagramPacket request = new DatagramPacket(buffer,

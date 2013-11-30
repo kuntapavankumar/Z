@@ -29,6 +29,7 @@ public class UDPClient implements Imessenger {
 					.getHost());
 			DatagramPacket request = new DatagramPacket(m, m.length, aHost, msg
 					.getToAddress().getPort());
+			System.out.println("sending request");
 			aSocket.send(request);
 			byte[] buffer = new byte[1000];
 			DatagramPacket reply = new DatagramPacket(buffer, buffer.length);

@@ -7,14 +7,17 @@ import java.util.concurrent.TimeUnit;
 public abstract class HeartbeatScheduler {
 
 	public void start() {
-		new ScheduledThreadPoolExecutor(1).schedule(new HeartBeatTask(), 5,
-				TimeUnit.SECONDS);
+		new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(
+				new HeartBeatTask(), 0, 6, TimeUnit.SECONDS);
+		System.out.println("HeartbeatScheduler is up and running");
 	}
 
 	class HeartBeatTask implements Runnable {
 		@Override
 		public void run() {
-			for (Node node : getNodes()) {
+			List<Node> nodes = getNodes();
+			for (Node node : nodes) {
+				System.out.println("checking for another node");
 				boolean isAlive = node.isAlive();
 				if (!isAlive) {
 					onFailedNode(node);
