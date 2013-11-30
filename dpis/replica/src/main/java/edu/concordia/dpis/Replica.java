@@ -1,6 +1,5 @@
 package edu.concordia.dpis;
 
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.List;
 
 import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.commons.DeadNodeException;
+import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.messenger.UDPServer;
 
 /**
@@ -63,9 +63,8 @@ public class Replica extends UDPServer implements Node {
 	}
 
 	@Override
-	protected String getReplyMessage(DatagramPacket request) {
-		return requestHandler.doOperation(new String(request.getData()))
-				.toString();
+	protected String getReplyMessage(Message request) {
+		return requestHandler.doOperation(request).toString();
 	}
 
 	@Override

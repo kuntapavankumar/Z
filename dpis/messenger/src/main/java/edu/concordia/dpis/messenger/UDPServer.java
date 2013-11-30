@@ -1,9 +1,15 @@
 package edu.concordia.dpis.messenger;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+
+import edu.concordia.dpis.commons.Message;
+import edu.concordia.dpis.commons.ReliableMessage;
 
 public abstract class UDPServer {
 	private DatagramSocket aSocket = null;
@@ -23,8 +29,9 @@ public abstract class UDPServer {
 						DatagramPacket request = new DatagramPacket(buffer,
 								buffer.length);
 						aSocket.receive(request);
-						byte[] payload = getReplyMessage(request).getBytes(
-								"US-ASCII");
+						byte[] payload = getReplyMessage(
+								deserializeMessage(request.getData()))
+								.getBytes("US-ASCII");
 						DatagramPacket reply = new DatagramPacket(payload,
 								payload.length, request.getAddress(),
 								request.getPort());
@@ -50,5 +57,17 @@ public abstract class UDPServer {
 		}
 	}
 
-	protected abstract String getReplyMessage(DatagramPacket request);
+	private Message deserializeMessage(byte[] msg) throws IOException {
+		ObjectInputStream reader = new ObjectInputStream(
+				new ByteArrayInputStream(msg));
+		try {
+			Message request = (ReliableMessage) reader.readObject();
+			return request;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	protected abstract String getReplyMessage(Message message);
 }

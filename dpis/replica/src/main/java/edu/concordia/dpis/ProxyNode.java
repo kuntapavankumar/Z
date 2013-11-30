@@ -7,8 +7,7 @@ import java.util.concurrent.TimeoutException;
 import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.commons.DeadNodeException;
 import edu.concordia.dpis.commons.Message;
-import edu.concordia.dpis.commons.UDPMessage;
-import edu.concordia.dpis.commons.UDPMessage.MessageBuilder;
+import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.messenger.UDPClient;
 
 public class ProxyNode implements Node {
@@ -36,26 +35,20 @@ public class ProxyNode implements Node {
 		Message fromMessage = null;
 		try {
 			fromMessage = this.udpClient.send(toMessage, 1000);
-		} catch (FileNotFoundException e) {
+		} catch (edu.concordia.dpis.commons.TimeoutException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			e.printStackTrace();
-			throw new DeadNodeException();
 		}
 		return fromMessage;
 	}
 
 	private Message newMessage(String operationName, Object... params) {
-		MessageBuilder builder = new UDPMessage.MessageBuilder()
-				.setOperationName(operationName)
-				.setToHost(this.address.getHost())
-				.setToPort(this.address.getPort());
+		ReliableMessage rMsg = new ReliableMessage(operationName,
+				this.address.getHost(), this.address.getPort());
+
 		for (Object param : params) {
-			builder.addParam(param);
+			rMsg.addArgument(param);
 		}
-		return builder.build();
+		return rMsg;
 	}
 
 	@Override

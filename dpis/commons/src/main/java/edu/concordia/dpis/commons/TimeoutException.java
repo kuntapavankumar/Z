@@ -2,7 +2,7 @@ package edu.concordia.dpis.commons;
 
 public class TimeoutException extends Exception {
 
-	TimeoutException() {
+	public TimeoutException() {
 		super("Timed out");
 	}
 

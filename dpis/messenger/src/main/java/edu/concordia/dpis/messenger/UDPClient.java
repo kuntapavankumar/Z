@@ -1,29 +1,30 @@
 package edu.concordia.dpis.messenger;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Arrays;
-import java.util.concurrent.TimeoutException;
 
+import edu.concordia.dpis.commons.Imessenger;
 import edu.concordia.dpis.commons.Message;
-import edu.concordia.dpis.commons.UDPMessage;
+import edu.concordia.dpis.commons.ReliableMessage;
+import edu.concordia.dpis.commons.TimeoutException;
 
-public class UDPClient {
+public class UDPClient implements Imessenger {
 
-	// private static Logger log = Logger.getLogger(UDPClient.class.getName());
-
-	public Message send(Message msg, int timeout) throws FileNotFoundException,
-			IOException, TimeoutException {
+	@Override
+	public Message send(Message msg, int timeout)
+			throws edu.concordia.dpis.commons.TimeoutException {
 		String response = null;
 		DatagramSocket aSocket = null;
 		try {
 			aSocket = new DatagramSocket();
-			byte[] m = msg.getActualMessage().getBytes();
+			byte[] m = serializeMessage(msg);
 			InetAddress aHost = InetAddress.getByName(msg.getToAddress()
 					.getHost());
 			DatagramPacket request = new DatagramPacket(m, m.length, aHost, msg
@@ -51,13 +52,17 @@ public class UDPClient {
 				aSocket.close();
 			}
 		}
-		final Message retMessage = new UDPMessage(response, msg.getToAddress()
-				.getHost(), msg.getToAddress().getPort());
+		final Message retMessage = new ReliableMessage(response, msg
+				.getToAddress().getHost(), msg.getToAddress().getPort());
 		return retMessage;
 
 	}
 
-	public Message send(Message msg) throws FileNotFoundException, IOException, TimeoutException {
-		return send(msg, 0);
+	private byte[] serializeMessage(Message msg) throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(bos);
+		out.writeObject(msg);
+		out.close();
+		return bos.toByteArray();
 	}
 }
