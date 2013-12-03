@@ -18,13 +18,16 @@ public class LeaderTest {
 		Address frontEndAddress = new Address("localhost", 2100);
 
 		Address replica2Address = new Address("localhost", 2300);
+		replica2Address.setId("75");
 		ProxyNode replica2 = new ProxyNode(replica2Address);
 
 		Address replica3Address = new Address("localhost", 2400);
 		ProxyNode replica3 = new ProxyNode(replica3Address);
+		replica3Address.setId("50");
 
 		Address replica4Address = new Address("localhost", 2500);
 		ProxyNode replica4 = new ProxyNode(replica4Address);
+		replica4Address.setId("25");
 
 		Replica leader = new Replica(2200, true, 100, frontEndAddress)
 				.addNode(replica2).addNode(replica3).addNode(replica4);

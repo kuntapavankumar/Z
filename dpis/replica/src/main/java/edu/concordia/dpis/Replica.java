@@ -79,10 +79,10 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 		super(port);
 		this.address = new Address(InetAddress.getLocalHost().getHostAddress(),
 				port);
-		this.address.setId(replicaId + " ");
+		this.address.setId(replicaId + "");
 		this.frontEndAddress = frontEndAddress;
 		if (isLeader) {
-			this.leaderName = replicaId + " ";
+			this.leaderName = replicaId + "";
 			// now let the front end know that you are the leader
 			notifyFrontEndTheNewLeader();
 		}
@@ -95,10 +95,13 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 
 			@Override
 			protected boolean isLeader(String id) {
+				System.out.println("isLeader[" + leaderName + "," + id + "]");
+				System.out.println("isLeader:" + getLeaderName().equals(id));
 				return getLeaderName().equals(id);
 			}
 
 			protected void onFailedNode(Node node) {
+				System.out.println("Now the leader is " + getLeaderName());
 				System.out.println("Node deployed on"
 						+ node.getAddress().getHost() + " and on port"
 						+ node.getAddress().getPort() + " is not responding");
@@ -206,32 +209,39 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 												+ node.getAddress().getHost()
 												+ " and on port "
 												+ node.getAddress().getPort());
-								MessageType mType = node.election(address
-										.getId());
-								if (MessageType.COORDINATOR.equals(mType)) {
-									System.out
-											.println("node deployed on "
-													+ node.getAddress()
-															.getHost()
-													+ " and on port "
-													+ node.getAddress()
-															.getPort()
-													+ " replied with a COORDINATOR message");
-									newLeader(node.getAddress().getId());
-								} else if (MessageType.OK.equals(mType)) {
-									System.out.println("node deployed on "
-											+ node.getAddress().getHost()
-											+ " and on port"
-											+ node.getAddress().getPort()
-											+ " replied with a OK message");
-									try {
+								if (node.getAddress().getId()
+										.equals(leaderName)) {
+									continue;
+								}
+								if (node.getAddress().getId()
+										.compareTo(address.getId()) >= 0) {
+									MessageType mType = node.election(address
+											.getId());
+									if (MessageType.COORDINATOR.equals(mType)) {
 										System.out
-												.println("will wait for some time to let some one inform me about the new leader");
-										Thread.sleep((long) (5000 + (1000 * Math
-												.random())));
-									} catch (InterruptedException e) {
-										// expect the leader is
-										// available by this time
+												.println("node deployed on "
+														+ node.getAddress()
+																.getHost()
+														+ " and on port "
+														+ node.getAddress()
+																.getPort()
+														+ " replied with a COORDINATOR message");
+										newLeader(node.getAddress().getId());
+									} else if (MessageType.OK.equals(mType)) {
+										System.out.println("node deployed on "
+												+ node.getAddress().getHost()
+												+ " and on port"
+												+ node.getAddress().getPort()
+												+ " replied with a OK message");
+										try {
+											System.out
+													.println("will wait for some time to let some one inform me about the new leader");
+											Thread.sleep((long) (5000 + (1000 * Math
+													.random())));
+										} catch (InterruptedException e) {
+											// expect the leader is
+											// available by this time
+										}
 									}
 								}
 							} catch (DeadNodeException e) {

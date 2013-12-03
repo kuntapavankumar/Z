@@ -19,13 +19,16 @@ public class Replica3Test {
 
 		Address leaderAddress = new Address("localhost", 2200);
 		ProxyNode leader = new ProxyNode(leaderAddress);
+		leaderAddress.setId("100");
 
 		Address replica2Address = new Address("localhost", 2300);
 		ProxyNode replica2 = new ProxyNode(replica2Address);
-
+		replica2Address.setId("75");
+		
 		Address replica4Address = new Address("localhost", 2500);
 		ProxyNode replica4 = new ProxyNode(replica4Address);
-
+		replica4Address.setId("25");
+		
 		Replica replica3 = new Replica(2400, 50, frontEndAddress)
 				.addNode(leader).addNode(replica2).addNode(replica4);
 
