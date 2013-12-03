@@ -143,6 +143,7 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	 */
 	public void newLeader(final String name) {
 		this.leaderName = name;
+		System.out.println("Now, the leader is " + name);
 		if (leaderName.equals(this.address.getId())) {
 			if (!multicastListener.isClosed()) {
 				multicastListener.leaveGroup();
