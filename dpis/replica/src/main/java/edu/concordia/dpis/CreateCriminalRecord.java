@@ -1,5 +1,7 @@
 package edu.concordia.dpis;
 
+import java.util.List;
+
 public class CreateCriminalRecord implements Command {
 
 	private StationServer stationServer;
@@ -9,10 +11,12 @@ public class CreateCriminalRecord implements Command {
 	}
 
 	@Override
-	public Object execute(Object... params) {
-		return stationServer.createCRecord(params[0].toString(),
-				params[1].toString(), params[2].toString(),
-				params[3].toString(), params[4].toString());
+	public Object execute(List<Object> params) {
+		System.out.println("executing create criminal record");
+		return stationServer.createCRecord(params.get(0).toString(), params
+				.get(1).toString(), params.get(2).toString(), params.get(3)
+				.toString(), params.get(4).toString())
+				+ "";
 	}
 
 }

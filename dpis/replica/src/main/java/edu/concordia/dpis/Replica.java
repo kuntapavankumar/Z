@@ -1,5 +1,7 @@
 package edu.concordia.dpis;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.commons.DeadNodeException;
 import edu.concordia.dpis.commons.Message;
+import edu.concordia.dpis.commons.MessageTransformer;
 import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.commons.TimeoutException;
 import edu.concordia.dpis.messenger.UDPClient;
@@ -38,8 +41,37 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 
 	private Address frontEndAddress;
 
-	public Replica(int port, int replicaId) throws UnknownHostException {
-		this(port, false, replicaId, null);
+	private MulticastListener multicastListener;
+
+	public Replica(int port, int replicaId, Address frontEndAddress)
+			throws UnknownHostException {
+		this(port, false, replicaId, frontEndAddress);
+		multicastListener = new MulticastListener(3000, "230.0.0.1") {
+			@Override
+			public Message onMessage(DatagramPacket pack) {
+				ReliableMessage msg = null;
+				ReliableMessage reply;
+				try {
+					msg = (ReliableMessage) MessageTransformer
+							.deserializeMessage(pack.getData());
+					msg.setMulticast(false);
+					String str = getReplyMessage(msg);
+					reply = new ReliableMessage("SUCCESS", msg.getToAddress()
+							.getHost(), msg.getToAddress().getPort());
+					reply.addArgument(str);
+					reply.setReply(true);
+					reply.setSequenceNumber(msg.getSequenceNumber());
+					return reply;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				reply = new ReliableMessage("FAILURE", msg.getToAddress()
+						.getHost(), msg.getToAddress().getPort());
+				reply.setSequenceNumber(msg.getSequenceNumber());
+				return reply;
+			}
+		};
+		multicastListener.joinGroup();
 	}
 
 	public Replica(int port, boolean isLeader, int replicaId,
@@ -48,10 +80,12 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 		this.address = new Address(InetAddress.getLocalHost().getHostAddress(),
 				port);
 		this.address.setId(replicaId + " ");
-		this.leaderName = replicaId + "";
 		this.frontEndAddress = frontEndAddress;
-		// now let the front end know that you are the leader
-		notifyFrontEndTheNewLeader();
+		if (isLeader) {
+			this.leaderName = replicaId + " ";
+			// now let the front end know that you are the leader
+			notifyFrontEndTheNewLeader();
+		}
 		System.out
 				.println("Replica initialized, start the replica by calling start() method.");
 	}
@@ -68,7 +102,8 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 				System.out.println("Node deployed on"
 						+ node.getAddress().getHost() + " and on port"
 						+ node.getAddress().getPort() + " is not responding");
-				if (isLeader(node.getAddress().getId())) {
+				if (getLeaderName() == null
+						|| isLeader(node.getAddress().getId())) {
 					System.out.println("Replica " + address.getId()
 							+ " found leader failure");
 					election(address.getId());
@@ -76,8 +111,8 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 			};
 
 			public List<Node> getNodes() {
-				System.out
-						.println("getNodes called nodes size:" + nodes.size());
+				System.out.println("Heartbeatscheduler initiated by ["
+						+ address.getHost() + "," + address.getPort() + "]");
 				return nodes;
 			};
 		}.start();
@@ -85,6 +120,13 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 
 	@Override
 	protected String getReplyMessage(Message request) {
+		System.out.println("request received :" + request.getActualMessage());
+		if ("election".equalsIgnoreCase(request.getActualMessage())) {
+			return election((String) request.getArguments().get(0)).toString();
+		} else if ("newLeader".equalsIgnoreCase(request.getActualMessage())) {
+			newLeader((String) request.getArguments().get(0));
+			return "SUCCESS";
+		}
 		return requestHandler.doOperation(request).toString();
 	}
 
@@ -102,6 +144,9 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	public void newLeader(final String name) {
 		this.leaderName = name;
 		if (leaderName.equals(this.address.getId())) {
+			if (!multicastListener.isClosed()) {
+				multicastListener.leaveGroup();
+			}
 			notifyFrontEndTheNewLeader();
 			for (final Node node : nodes) {
 				new Thread(new Runnable() {
@@ -110,10 +155,14 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 						try {
 							node.newLeader(name);
 						} catch (DeadNodeException e) {
-							e.printStackTrace();
+							System.out.println(e.getMessage());
 						}
 					}
 				}).start();
+			}
+		} else {
+			if (this.multicastListener.isClosed()) {
+				this.multicastListener.joinGroup();
 			}
 		}
 	}
@@ -126,7 +175,7 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 			int attempts = 0;
 			while (attempts < 3) {
 				try {
-					Message replyMsg = new UDPClient().send(leaderMsg, 5000);
+					Message replyMsg = new UDPClient().send(leaderMsg, 0);
 					if ("OK".equals(replyMsg.getActualMessage()))
 						break;
 				} catch (TimeoutException e1) {
@@ -144,7 +193,7 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	public MessageType election(String replicaId) {
 		System.out.println("election is going to be started by " + replicaId);
 		leaderName = null;
-		if (this.address.getId().compareTo(replicaId) > 0) {
+		if (this.address.getId().compareTo(replicaId) >= 0) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -177,7 +226,8 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 									try {
 										System.out
 												.println("will wait for some time to let some one inform me about the new leader");
-										Thread.sleep(2000);
+										Thread.sleep((long) (5000 + (1000 * Math
+												.random())));
 									} catch (InterruptedException e) {
 										// expect the leader is
 										// available by this time

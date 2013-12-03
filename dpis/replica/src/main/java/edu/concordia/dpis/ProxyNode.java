@@ -4,7 +4,6 @@ import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.commons.DeadNodeException;
 import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.ReliableMessage;
-import edu.concordia.dpis.commons.TimeoutException;
 import edu.concordia.dpis.messenger.UDPClient;
 
 public class ProxyNode implements Node {
@@ -27,23 +26,29 @@ public class ProxyNode implements Node {
 		return fromMessage.getActualMessage();
 	}
 
-	private Message sendMessage(String operationName, Object... params)
-			throws DeadNodeException {
+	private Message sendMessage(String operationName, int timeout,
+			String... params) throws DeadNodeException {
 		Message toMessage = newMessage(operationName, params);
 		Message fromMessage = null;
 		try {
-			fromMessage = this.udpClient.send(toMessage, 1000);
+			fromMessage = this.udpClient.send(toMessage, timeout);
 		} catch (edu.concordia.dpis.commons.TimeoutException e) {
-			System.out.println(e.getMessage());
+			throw new DeadNodeException();
 		}
 		return fromMessage;
 	}
 
-	private Message newMessage(String operationName, Object... params) {
+	private Message sendMessage(String operationName, String... params)
+			throws DeadNodeException {
+		return sendMessage(operationName, 0, params);
+	}
+
+	private Message newMessage(String operationName, String... params)
+			throws DeadNodeException {
 		ReliableMessage rMsg = new ReliableMessage(operationName,
 				this.address.getHost(), this.address.getPort());
 
-		for (Object param : params) {
+		for (String param : params) {
 			rMsg.addArgument(param);
 		}
 		return rMsg;
@@ -51,12 +56,12 @@ public class ProxyNode implements Node {
 
 	@Override
 	public void newLeader(String name) throws DeadNodeException {
-		sendMessage("newLeader", name);
+		sendMessage("newLeader", 2000, name);
 	}
 
 	@Override
 	public MessageType election(String name) throws DeadNodeException {
-		Message msg = sendMessage("election", name);
+		Message msg = sendMessage("election", 2000, name);
 		return MessageType.valueOf(msg.getActualMessage());
 	}
 
@@ -68,8 +73,7 @@ public class ProxyNode implements Node {
 	@Override
 	public boolean isAlive() {
 		try {
-			System.out.println("checking for aliveness");
-			Message msg = sendMessage("isAlive");
+			Message msg = sendMessage("isAlive", 2000);
 			if (msg != null && msg.getActualMessage() != null) {
 				return true;
 			}

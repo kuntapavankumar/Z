@@ -1,14 +1,11 @@
 package edu.concordia.dpis.messenger;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
 import edu.concordia.dpis.commons.Message;
-import edu.concordia.dpis.commons.ReliableMessage;
+import edu.concordia.dpis.commons.MessageTransformer;
 
 public abstract class UDPServer {
 	private DatagramSocket aSocket = null;
@@ -26,29 +23,48 @@ public abstract class UDPServer {
 					System.out.println("UDPServer is up and running on port"
 							+ port);
 					while (true) {
-						byte[] buffer = new byte[1000];
-						DatagramPacket request = new DatagramPacket(buffer,
-								buffer.length);
-						aSocket.receive(request);
-						byte[] payload = getReplyMessage(
-								deserializeMessage(request.getData()))
-								.getBytes("US-ASCII");
-						DatagramPacket reply = new DatagramPacket(payload,
-								payload.length, request.getAddress(),
-								request.getPort());
-						aSocket.send(reply);
+						try {
+							byte[] buffer = new byte[1000];
+							final DatagramPacket request = new DatagramPacket(buffer,
+									buffer.length);
+							aSocket.receive(request);
+
+							new Thread(new Runnable() {
+
+								@Override
+								public void run() {
+									try {
+										byte[] payload = getReplyMessage(
+												MessageTransformer
+														.deserializeMessage(request
+																.getData()))
+												.getBytes("US-ASCII");
+										DatagramPacket reply = new DatagramPacket(
+												payload, payload.length,
+												request.getAddress(), request
+														.getPort());
+										aSocket.send(reply);
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
+
+								}
+
+							}).start();
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
 					}
+
 				} catch (SocketException e) {
 					System.out.println("Socket: " + e.getMessage());
-				} catch (IOException e) {
-					System.out.println("IO: " + e.getMessage());
 				} finally {
 					if (aSocket != null) {
 						aSocket.close();
 					}
 				}
 			}
-
 		}).start();
 	}
 
@@ -56,18 +72,6 @@ public abstract class UDPServer {
 		if (aSocket != null) {
 			aSocket.close();
 		}
-	}
-
-	private Message deserializeMessage(byte[] msg) throws IOException {
-		ObjectInputStream reader = new ObjectInputStream(
-				new ByteArrayInputStream(msg));
-		try {
-			Message request = (ReliableMessage) reader.readObject();
-			return request;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	protected abstract String getReplyMessage(Message message);

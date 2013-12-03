@@ -10,4 +10,10 @@ public interface Message extends IReliable, Serializable {
 	List<Object> getArguments();
 
 	Address getToAddress();
+
+	int getSequenceNumber();
+
+	boolean isMulticast();
+
+	boolean isReply();
 }

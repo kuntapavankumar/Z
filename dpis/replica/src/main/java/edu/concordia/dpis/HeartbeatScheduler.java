@@ -8,7 +8,7 @@ public abstract class HeartbeatScheduler {
 
 	public void start() {
 		new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(
-				new HeartBeatTask(), 0, 6, TimeUnit.SECONDS);
+				new HeartBeatTask(), 10, 30, TimeUnit.SECONDS);
 		System.out.println("HeartbeatScheduler is up and running");
 	}
 
@@ -17,10 +17,12 @@ public abstract class HeartbeatScheduler {
 		public void run() {
 			List<Node> nodes = getNodes();
 			for (Node node : nodes) {
-				System.out.println("checking for another node");
 				boolean isAlive = node.isAlive();
 				if (!isAlive) {
 					onFailedNode(node);
+				} else {
+					System.out.println("Node [" + node.getAddress().getHost()
+							+ "," + node.getAddress().getPort() + "] is alive");
 				}
 			}
 		}
