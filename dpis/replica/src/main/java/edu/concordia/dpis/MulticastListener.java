@@ -8,7 +8,6 @@ import java.net.UnknownHostException;
 
 import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.TimeoutException;
-import edu.concordia.dpis.fifo.FIFO;
 import edu.concordia.dpis.messenger.UDPClient;
 
 public class MulticastListener {

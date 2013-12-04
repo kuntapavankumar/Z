@@ -42,13 +42,25 @@ public class Replica2Test {
 			}
 		});
 
-		StationServer stationServer = new StationServerImpl(StationType.SPVM);
+		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
+		spvm.startUDPServer("3200");
+		spvm.startTCPPServer("3300");
+
+		StationServerImpl spb = new StationServerImpl(StationType.SPB);
+		spb.startUDPServer("3400");
+		spb.startTCPPServer("3500");
+
+		StationServerImpl spl = new StationServerImpl(StationType.SPL);
+		spl.startUDPServer("3600");
+		spl.startTCPPServer("3700");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
-				stationServer));
+				spvm, spb, spl));
+
+		requestHandler.addCommand("getRecordCounts", new CreateCriminalRecord(
+				spvm, spb, spl));
 
 		replica2.setRequestHandler(requestHandler);
-
 		replica2.start();
 		replica2.startFailureDetection();
 	}

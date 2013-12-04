@@ -145,6 +145,22 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	 * in effect immediately.
 	 */
 	public void newLeader(final String name) {
+		int i = 0;
+		for (Node node : nodes) {
+			if (i >= 3) {
+				break;
+			}
+			if (node.isAlive()) {
+				i++;
+			}
+		}
+		System.out.println("Active replicas:" + i);
+		if ((i + 1) < 3) {
+			System.out
+					.println("Leader cannot be elected because there must be atleast 3 replicas alive");
+			return;
+		}
+
 		this.leaderName = name;
 		System.out.println("Now, the leader is " + name);
 		if (leaderName.equals(this.address.getId())) {
@@ -250,7 +266,6 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 						}
 					}
 					if (leaderName == null) {
-						System.out.println("no one responded to election");
 						System.out.println("electing myself as the new leader");
 						newLeader(address.getId());
 					}

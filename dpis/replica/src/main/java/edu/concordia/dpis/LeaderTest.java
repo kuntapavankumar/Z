@@ -42,10 +42,23 @@ public class LeaderTest {
 			}
 		});
 
-		StationServer stationServer = new StationServerImpl(StationType.SPVM);
+		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
+		spvm.startUDPServer("2600");
+		spvm.startTCPPServer("2700");
+
+		StationServerImpl spb = new StationServerImpl(StationType.SPB);
+		spb.startUDPServer("2800");
+		spb.startTCPPServer("2900");
+
+		StationServerImpl spl = new StationServerImpl(StationType.SPL);
+		spl.startUDPServer("3000");
+		spl.startTCPPServer("3100");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
-				stationServer));
+				spvm, spb, spl));
+
+		requestHandler.addCommand("getRecordCounts", new CreateCriminalRecord(
+				spvm, spb, spl));
 
 		leader.setRequestHandler(requestHandler);
 		leader.start();

@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import edu.concordia.dpis.stationserver.domain.RecordType;
 import edu.concordia.dpis.stationserver.domain.StationType;
 
 // A BUSINESS CLASS IMPLEMENTING THE CLIENT-SERVER CONTRACT INTERFACE
-public class StationServerImpl implements StationServer{
+public class StationServerImpl implements StationServer {
 
 	// this station name
 	private final StationType stationType;
@@ -54,14 +55,13 @@ public class StationServerImpl implements StationServer{
 	// all the date's will be interpreted as mm/DD/yyyy
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("mm/DD/yyyy");
 
-	/*
-	 * start's UDP server on the port number given in the properites file
-	 */
-	public StationServerImpl startUDPServer() {
-		// read the host and port number to be started on for this station
-		String port = extractHostAndPortNumber((String) udpProperties
-				.get(this.stationType.getStationCode()))[1];
-
+	public StationServerImpl startUDPServer(String port) {
+		try {
+			udpProperties.setProperty(this.stationType.getStationCode(),
+					InetAddress.getLocalHost().getHostName() + " " + port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		this.udpServer = new UDPServer(Integer.valueOf(port));
 		this.log.debug(this.stationType.getStationCode()
 				+ ":UDPServer started on port[" + port + "]");
@@ -71,15 +71,34 @@ public class StationServerImpl implements StationServer{
 	/*
 	 * start's UDP server on the port number given in the properites file
 	 */
-	public StationServerImpl startTCPPServer() {
+	public StationServerImpl startUDPServer() {
 		// read the host and port number to be started on for this station
-		String port = extractHostAndPortNumber((String) tcpProperties
+		String port = extractHostAndPortNumber((String) udpProperties
 				.get(this.stationType.getStationCode()))[1];
+		return startUDPServer(port);
+	}
 
+	public StationServerImpl startTCPPServer(String port) {
+		try {
+			tcpProperties.setProperty(this.stationType.getStationCode(),
+					InetAddress.getLocalHost().getHostName() + " " + port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		this.tcpServer = new TCPServer(Integer.valueOf(port));
 		this.log.debug(this.stationType.getStationCode()
 				+ ":TCPServer started on port[" + port + "]");
 		return this;
+	}
+
+	/*
+	 * start's TCP server on the port number given in the properites file
+	 */
+	public StationServerImpl startTCPPServer() {
+		// read the host and port number to be started on for this station
+		String port = extractHostAndPortNumber((String) tcpProperties
+				.get(this.stationType.getStationCode()))[1];
+		return startTCPPServer(port);
 	}
 
 	/**

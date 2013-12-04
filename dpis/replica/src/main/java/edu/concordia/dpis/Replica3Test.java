@@ -24,11 +24,11 @@ public class Replica3Test {
 		Address replica2Address = new Address("localhost", 2300);
 		ProxyNode replica2 = new ProxyNode(replica2Address);
 		replica2Address.setId("75");
-		
+
 		Address replica4Address = new Address("localhost", 2500);
 		ProxyNode replica4 = new ProxyNode(replica4Address);
 		replica4Address.setId("25");
-		
+
 		Replica replica3 = new Replica(2400, 50, frontEndAddress)
 				.addNode(leader).addNode(replica2).addNode(replica4);
 
@@ -42,10 +42,23 @@ public class Replica3Test {
 			}
 		});
 
-		StationServer stationServer = new StationServerImpl(StationType.SPVM);
+		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
+		spvm.startUDPServer("3800");
+		spvm.startTCPPServer("3900");
+
+		StationServerImpl spb = new StationServerImpl(StationType.SPB);
+		spb.startUDPServer("4000");
+		spb.startTCPPServer("4100");
+
+		StationServerImpl spl = new StationServerImpl(StationType.SPL);
+		spl.startUDPServer("4200");
+		spl.startTCPPServer("4300");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
-				stationServer));
+				spvm, spb, spl));
+
+		requestHandler.addCommand("getRecordCounts", new CreateCriminalRecord(
+				spvm, spb, spl));
 
 		replica3.setRequestHandler(requestHandler);
 
