@@ -17,3 +17,55 @@
 13:28:56,325-main--DEBUG-SPB:SPB:UDPServer started on port[4015]
 13:28:56,326-main--DEBUG-SPB:SPB:TCPServer started on port[4016]
 13:28:59,310-main--INFO -SPB:Brossard initialized!
+16:24:31,324-main--INFO -SPB:Brossard initialized!
+16:24:31,324-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+16:24:31,325-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+16:24:35,258-main--INFO -SPB:Brossard initialized!
+16:24:35,258-main--DEBUG-SPB:SPB:UDPServer started on port[4009]
+16:24:35,259-main--DEBUG-SPB:SPB:TCPServer started on port[4010]
+16:27:46,238-main--INFO -SPB:Brossard initialized!
+16:27:46,238-main--DEBUG-SPB:SPB:UDPServer started on port[4009]
+16:27:46,239-main--DEBUG-SPB:SPB:TCPServer started on port[4010]
+16:28:56,649-Thread-34--DEBUG-SPB:TCP Server recieved request for record transfer...CR00002,CRIMINAL,dummyfname,dummylastname,dummydesc,CAPTURED
+16:28:56,650-Thread-34--DEBUG-SPB:ADMIN initiated createCRecord
+16:28:56,650-Thread-34--DEBUG-SPB:SPB:Successfully created Criminal Record
+16:57:37,069-main--INFO -SPB:Brossard initialized!
+16:57:37,070-main--DEBUG-SPB:SPB:UDPServer started on port[4009]
+16:57:37,070-main--DEBUG-SPB:SPB:TCPServer started on port[4010]
+16:57:43,410-main--INFO -SPB:Brossard initialized!
+16:57:43,410-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+16:57:43,411-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+16:58:49,865-Thread-60--DEBUG-SPB:TCP Server recieved request for record transfer...CR00002,CRIMINAL,dummyfname,dummylastname,dummydesc,CAPTURED
+16:58:49,867-Thread-60--DEBUG-SPB:ADMIN initiated createCRecord
+16:58:49,867-Thread-60--DEBUG-SPB:SPB:Successfully created Criminal Record
+16:58:49,864-Thread-11--DEBUG-SPB:TCP Server recieved request for record transfer...CR00002,CRIMINAL,dummyfname,dummylastname,dummydesc,CAPTURED
+16:58:49,869-Thread-11--DEBUG-SPB:ADMIN initiated createCRecord
+16:58:49,869-Thread-11--DEBUG-SPB:SPB:Successfully created Criminal Record
+17:24:15,835-main--INFO -SPB:Brossard initialized!
+17:24:15,835-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+17:24:15,836-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:20:56,711-main--INFO -SPB:Brossard initialized!
+18:20:56,711-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+18:20:56,712-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:22:08,835-main--INFO -SPB:Brossard initialized!
+18:22:08,836-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+18:22:08,836-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:23:58,143-main--INFO -SPB:Brossard initialized!
+18:23:58,143-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+18:23:58,144-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:28:40,270-main--INFO -SPB:Brossard initialized!
+18:28:40,271-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+18:28:40,271-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:29:39,916-main--INFO -SPB:Brossard initialized!
+18:29:39,916-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+18:29:39,917-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:55:59,669-main--INFO -SPB:Brossard initialized!
+18:55:59,669-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+18:55:59,670-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+18:56:05,930-main--INFO -SPB:Brossard initialized!
+18:56:05,930-main--DEBUG-SPB:SPB:UDPServer started on port[4009]
+18:56:05,931-main--DEBUG-SPB:SPB:TCPServer started on port[4010]
+18:56:08,823-main--INFO -SPB:Brossard initialized!
+18:56:08,824-main--DEBUG-SPB:SPB:UDPServer started on port[4015]
+18:56:08,824-main--DEBUG-SPB:SPB:TCPServer started on port[4016]
+18:56:11,301-main--INFO -SPB:Brossard initialized!

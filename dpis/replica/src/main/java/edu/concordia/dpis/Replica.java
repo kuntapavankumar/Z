@@ -113,7 +113,7 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 		if (isLeader) {
 			this.leaderName = replicaId + "";
 			// now let the front end know that you are the leader
-			notifyFrontEndTheNewLeader();
+			notifyFrontEndTheNewLeader(this.address);
 		}
 		System.out
 				.println("Replica initialized, start the replica by calling start() method.");
@@ -185,22 +185,22 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	 * in effect immediately.
 	 */
 	public void newLeader(final String name) {
-		//
-		// int i = 0;
-		// for (Node node : nodes) {
-		// if (i >= 3) {
-		// break;
-		// }
-		// if (node.isAlive()) {
-		// i++;
-		// }
-		// }
-		// System.out.println("Active replicas:" + i + 1);
-		// if ((i + 1) < 3) {
-		// System.out
-		// .println("Leader cannot be elected because there must be atleast 3 replicas alive");
-		// return;
-		// }
+		int i = 0;
+		for (Node node : nodes) {
+			if (i >= 3) {
+				break;
+			}
+			if (node.isAlive()) {
+				i++;
+			}
+		}
+		System.out.println("Active replicas:" + i + 1);
+		if ((i + 1) < 3) {
+			notifyFrontEndTheNewLeader(new Address("", 0));
+			System.out
+					.println("Leader cannot be elected because there must be atleast 3 replicas alive");
+			return;
+		}
 
 		// update leadername in this replica
 		this.leaderName = name;
@@ -213,7 +213,7 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 				multicastListener = null;
 			}
 			// let the front end know about this replica being the new leader
-			notifyFrontEndTheNewLeader();
+			notifyFrontEndTheNewLeader(this.address);
 			// let the other nodes know about the new leader
 			multicastNewLeader();
 		} else {
@@ -244,12 +244,12 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	}
 
 	// let the front end know about the new leader
-	private void notifyFrontEndTheNewLeader() {
+	private void notifyFrontEndTheNewLeader(Address address) {
 
 		if (frontEndAddress != null) {
 			ReliableMessage leaderMsg = new ReliableMessage("leaderInfo",
 					frontEndAddress.getHost(), frontEndAddress.getPort());
-			leaderMsg.addArgument(this.address);
+			leaderMsg.addArgument(address);
 			int attempts = 0;
 			// give 3 attempts
 			while (attempts < 3) {
@@ -343,7 +343,7 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 											// waits for the leader emerge
 											System.out
 													.println("will wait for some time to let some one inform me about the new leader");
-											Thread.sleep((long) (5000 + (1000 * Math
+											Thread.sleep((long) (3000 + (1000 * Math
 													.random())));
 										} catch (InterruptedException e) {
 											// expect the leader is

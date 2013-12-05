@@ -60,7 +60,7 @@ public class DefaultRequestHandler implements RequestHandler {
 				thisReturn = command.execute(msg.getArguments());
 				System.out
 						.println("giving some time for others to reply back to the leader.");
-				Thread.sleep(5000);
+				Thread.sleep(3000);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
@@ -70,7 +70,9 @@ public class DefaultRequestHandler implements RequestHandler {
 					.getToAddress().getHost(), msg.getToAddress().getPort());
 			thisResultMsg.addArgument(thisReturn);
 			// add this replica's result to the replies
-			replies.get(rMsg.getSequenceNumber()).add(thisResultMsg);
+			synchronized (replies.get(rMsg.getSequenceNumber())) {
+				replies.get(rMsg.getSequenceNumber()).add(thisResultMsg);
+			}
 			// find the best solution out of all the replies from different
 			// nodes
 			Object response = getAResponse(replies
@@ -84,7 +86,9 @@ public class DefaultRequestHandler implements RequestHandler {
 		if (msg.isReply()) {
 			System.out.println("got a reply for sequencenumber:"
 					+ rMsg.getSequenceNumber());
-			replies.get(rMsg.getSequenceNumber()).add(rMsg);
+			synchronized (replies.get(rMsg.getSequenceNumber())) {
+				replies.get(rMsg.getSequenceNumber()).add(rMsg);
+			}
 		} else {
 			// just have to run this operation only on this replica
 			final Command command = commands.get(getOperationName(msg));
