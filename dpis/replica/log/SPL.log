@@ -1,0 +1,19 @@
+13:06:40,650-main--INFO -SPL:Longueuil initialized!
+13:06:40,651-main--DEBUG-SPL:SPL:UDPServer started on port[4005]
+13:06:40,652-main--DEBUG-SPL:SPL:TCPServer started on port[4006]
+13:11:43,812-main--INFO -SPL:Longueuil initialized!
+13:11:43,813-main--DEBUG-SPL:SPL:UDPServer started on port[4005]
+13:11:43,813-main--DEBUG-SPL:SPL:TCPServer started on port[4006]
+13:12:22,921-main--INFO -SPL:Longueuil initialized!
+13:12:22,922-main--DEBUG-SPL:SPL:UDPServer started on port[4005]
+13:12:22,922-main--DEBUG-SPL:SPL:TCPServer started on port[4006]
+13:28:46,137-main--INFO -SPL:Longueuil initialized!
+13:28:46,137-main--DEBUG-SPL:SPL:UDPServer started on port[4005]
+13:28:46,138-main--DEBUG-SPL:SPL:TCPServer started on port[4006]
+13:28:49,612-main--INFO -SPL:Longueuil initialized!
+13:28:49,612-main--DEBUG-SPL:SPL:UDPServer started on port[4011]
+13:28:49,613-main--DEBUG-SPL:SPL:TCPServer started on port[4012]
+13:28:56,326-main--INFO -SPL:Longueuil initialized!
+13:28:56,327-main--DEBUG-SPL:SPL:UDPServer started on port[4017]
+13:28:56,327-main--DEBUG-SPL:SPL:TCPServer started on port[4018]
+13:28:59,312-main--INFO -SPL:Longueuil initialized!

@@ -45,15 +45,42 @@ public class Replica3Test {
 		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
 		spvm.startUDPServer("4013");
 		spvm.startTCPPServer("4014");
-		StationServer spb = new StationServerImpl(StationType.SPB);
-		spvm.startUDPServer("4015");
-		spvm.startTCPPServer("4016");
-		StationServer spl = new StationServerImpl(StationType.SPL);
-		spvm.startUDPServer("4017");
-		spvm.startTCPPServer("4018");
+		StationServerImpl spb = new StationServerImpl(StationType.SPB);
+		spb.startUDPServer("4015");
+		spb.startTCPPServer("4016");
+		StationServerImpl spl = new StationServerImpl(StationType.SPL);
+		spl.startUDPServer("4017");
+		spl.startTCPPServer("4018");
+
+		spvm.addOtherUDPStationHostNPort(StationType.SPB, "localhost", "4015");
+		spvm.addOtherTCPStationHostNPort(StationType.SPB, "localhost", "4016");
+		spvm.addOtherUDPStationHostNPort(StationType.SPL, "localhost", "4017");
+		spvm.addOtherTCPStationHostNPort(StationType.SPL, "localhost", "4018");
+
+		spb.addOtherUDPStationHostNPort(StationType.SPVM, "localhost", "4013");
+		spb.addOtherTCPStationHostNPort(StationType.SPVM, "localhost", "4014");
+		spb.addOtherUDPStationHostNPort(StationType.SPL, "localhost", "4017");
+		spb.addOtherTCPStationHostNPort(StationType.SPL, "localhost", "4018");
+
+		spl.addOtherUDPStationHostNPort(StationType.SPVM, "localhost", "4013");
+		spl.addOtherTCPStationHostNPort(StationType.SPVM, "localhost", "4014");
+		spl.addOtherUDPStationHostNPort(StationType.SPB, "localhost", "4015");
+		spl.addOtherTCPStationHostNPort(StationType.SPB, "localhost", "4016");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
 				spvm, spb, spl));
+
+		requestHandler.addCommand("createMRecord", new CreateMissingRecord(
+				spvm, spb, spl));
+
+		requestHandler.addCommand("getRecordCounts", new GetRecordCounts(spvm,
+				spb, spl));
+
+		requestHandler.addCommand("editRecord", new EditRecord(spvm, spb, spl));
+
+		requestHandler.addCommand("transferRecord", new TransferRecord(spvm,
+				spb, spl));
+
 		replica3.setRequestHandler(requestHandler);
 		replica3.start();
 		replica3.startFailureDetection();

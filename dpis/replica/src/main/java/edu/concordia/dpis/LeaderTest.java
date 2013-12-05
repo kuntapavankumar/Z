@@ -80,11 +80,11 @@ public class LeaderTest {
 
 		requestHandler.addCommand("editRecord", new EditRecord(spvm, spb, spl));
 
-		requestHandler.addCommand("transferRecord", new TransferRecord(spvm, spb,
-				spl));
+		requestHandler.addCommand("transferRecord", new TransferRecord(spvm,
+				spb, spl));
 
 		leader.setRequestHandler(requestHandler);
 		leader.start();
-//		leader.startFailureDetection();
+		leader.startFailureDetection();
 	}
 }

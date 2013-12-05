@@ -4,6 +4,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
+import org.apache.log4j.Logger;
+
 import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.MessageTransformer;
 
