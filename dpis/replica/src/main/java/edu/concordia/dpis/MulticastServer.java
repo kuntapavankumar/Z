@@ -7,7 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-
+@Deprecated
 public class MulticastServer extends Thread {
 	
 	private long FIVE_SECONDS = 5000;

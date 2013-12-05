@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
 
+@Deprecated
 public class MulticastReceiver extends Thread{
 	
 	private int port;

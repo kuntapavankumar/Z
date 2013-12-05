@@ -1,5 +1,6 @@
 package edu.concordia.dpis;
 
+@Deprecated
 public class MulticastServerMain {
 
 	public static void main(String[] args) {

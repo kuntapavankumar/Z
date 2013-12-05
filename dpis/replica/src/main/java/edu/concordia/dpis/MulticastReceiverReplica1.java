@@ -1,5 +1,6 @@
 package edu.concordia.dpis;
 
+@Deprecated
 public class MulticastReceiverReplica1 {
 
 	public static void main(String[] args) {

@@ -2,6 +2,7 @@ package edu.concordia.dpis;
 
 import java.net.UnknownHostException;
 
+@Deprecated
 public class ReplicaTest {
 
 	public static void main(String[] args) throws UnknownHostException {
