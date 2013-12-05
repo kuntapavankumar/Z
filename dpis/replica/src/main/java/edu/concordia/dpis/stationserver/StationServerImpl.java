@@ -56,12 +56,6 @@ public class StationServerImpl implements StationServer {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("mm/DD/yyyy");
 
 	public StationServerImpl startUDPServer(String port) {
-		try {
-			udpProperties.setProperty(this.stationType.getStationCode(),
-					InetAddress.getLocalHost().getHostName() + " " + port);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 		this.udpServer = new UDPServer(Integer.valueOf(port));
 		this.log.debug(this.stationType.getStationCode()
 				+ ":UDPServer started on port[" + port + "]");
@@ -89,6 +83,18 @@ public class StationServerImpl implements StationServer {
 		this.log.debug(this.stationType.getStationCode()
 				+ ":TCPServer started on port[" + port + "]");
 		return this;
+	}
+
+	public void addOtherUDPStationHostNPort(StationType stationType,
+			String host, String port) {
+		udpProperties.setProperty(stationType.getStationCode(), host + " "
+				+ port);
+	}
+
+	public void addOtherTCPStationHostNPort(StationType stationType,
+			String host, String port) {
+		tcpProperties.setProperty(stationType.getStationCode(), host + " "
+				+ port);
 	}
 
 	/*
@@ -139,9 +145,9 @@ public class StationServerImpl implements StationServer {
 
 	private void applyDefaultUDPSettings() {
 
-		udpProperties.setProperty("SPVM", "localhost 2021");
-		udpProperties.setProperty("SPB", "localhost 2022");
-		udpProperties.setProperty("SPL", "localhost 2025");
+		udpProperties.setProperty("SPVM", "localhost 9091");
+		udpProperties.setProperty("SPB", "localhost 9092");
+		udpProperties.setProperty("SPL", "localhost 9093");
 
 		try {
 			udpProperties.store(new FileOutputStream("./udp.properties"), null);
@@ -156,9 +162,9 @@ public class StationServerImpl implements StationServer {
 
 	private void applyDefaultTCPSettings() {
 
-		tcpProperties.setProperty("SPVM", "localhost 7896");
-		tcpProperties.setProperty("SPB", "localhost 7897");
-		tcpProperties.setProperty("SPL", "localhost 7898");
+		tcpProperties.setProperty("SPVM", "localhost 9094");
+		tcpProperties.setProperty("SPB", "localhost 9095");
+		tcpProperties.setProperty("SPL", "localhost 9096");
 
 		try {
 			tcpProperties.store(new FileOutputStream("./tcp.properties"), null);
@@ -188,7 +194,8 @@ public class StationServerImpl implements StationServer {
 	}
 
 	private boolean isOfficerAuthorized(String badgeId) {
-		return badgeId.startsWith(this.stationType.getStationCode());
+		return badgeId.startsWith(this.stationType.getStationCode())
+				|| "ADMIN".equals(badgeId);
 	}
 
 	/**
@@ -226,6 +233,8 @@ public class StationServerImpl implements StationServer {
 			return false;
 		}
 		log.debug(this.stationType.getStationCode()
+				+ ":Successfully created Criminal Record");
+		System.out.println(this.stationType.getStationCode()
 				+ ":Successfully created Criminal Record");
 		return true;
 	}
@@ -273,6 +282,8 @@ public class StationServerImpl implements StationServer {
 		}
 		log.debug(this.stationType.getStationCode()
 				+ ":Successfully created Missing Record");
+		System.out.println(this.stationType.getStationCode()
+				+ ":Successfully created Missing Record");
 		return true;
 
 	}
@@ -285,6 +296,8 @@ public class StationServerImpl implements StationServer {
 		// check if the user is allowed to create this operation
 		if (!isOfficerAuthorized(badgeId)) {
 			log.error(badgeId
+					+ " is not a authorized user to perform editRecord");
+			System.out.println(badgeId
 					+ " is not a authorized user to perform editRecord");
 			return false;
 		}
@@ -314,6 +327,8 @@ public class StationServerImpl implements StationServer {
 				// if no entry exists for this last name
 				log.error("No entry exists for this recordID:" + recordID
 						+ " with the given lastName:" + lastName);
+				System.out.println("No entry exists for this recordID:"
+						+ recordID + " with the given lastName:" + lastName);
 				return false;
 			}
 			// get the lock over entire list; because if not done there's a
@@ -328,6 +343,10 @@ public class StationServerImpl implements StationServer {
 							record.setStatus(newStatus);
 							log.debug(this.stationType.getStationCode()
 									+ ":Successfully edited Record:" + recordID);
+							System.out
+									.println(this.stationType.getStationCode()
+											+ ":Successfully edited Record:"
+											+ recordID);
 						}
 						return true;
 					}
@@ -686,6 +705,9 @@ public class StationServerImpl implements StationServer {
 					String data = in.readUTF();
 					log.debug("TCP Server recieved request for record transfer..."
 							+ data);
+					System.out
+							.println("TCP Server recieved request for record transfer..."
+									+ data);
 					StringTokenizer st = new StringTokenizer(data, ",");
 					String recordId = st.nextToken();
 					RecordType recordType = RecordType.valueOf(st.nextToken());
@@ -694,8 +716,8 @@ public class StationServerImpl implements StationServer {
 						String lastName = st.nextToken();
 						String description = st.nextToken();
 						String status = st.nextToken();
-						boolean res = createCRecord("", firstName, lastName,
-								description, status);
+						boolean res = createCRecord("ADMIN", firstName,
+								lastName, description, status);
 						out.writeUTF(Boolean.toString(res));
 					} else if (RecordType.MISSING.equals(recordType)) {
 
@@ -705,8 +727,9 @@ public class StationServerImpl implements StationServer {
 						String lastDate = st.nextToken();
 						String lastLocation = st.nextToken();
 						String status = st.nextToken();
-						boolean res = createMRecord("", firstName, lastName,
-								address, lastDate, lastLocation, status);
+						boolean res = createMRecord("ADMIN", firstName,
+								lastName, address, lastDate, lastLocation,
+								status);
 						out.writeUTF(Boolean.toString(res));
 					}
 				} catch (IOException e) {

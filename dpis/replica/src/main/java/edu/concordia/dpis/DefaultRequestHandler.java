@@ -73,6 +73,7 @@ public class DefaultRequestHandler implements RequestHandler {
 	}
 
 	private Object getAResponse(List<ReliableMessage> list) {
+		System.out.println("I got a total of " + list.size() + " messages");
 		HashMap<Object, Integer> results = new HashMap<Object, Integer>();
 		for (Message msg : list) {
 			if ("SUCCESS".equalsIgnoreCase(msg.getActualMessage())) {

@@ -43,23 +43,17 @@ public class Replica4Test {
 		});
 
 		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
-		spvm.startUDPServer("4500");
-		spvm.startTCPPServer("4600");
-
-		StationServerImpl spb = new StationServerImpl(StationType.SPB);
-		spb.startUDPServer("4700");
-		spb.startTCPPServer("4800");
-
-		StationServerImpl spl = new StationServerImpl(StationType.SPL);
-		spl.startUDPServer("4900");
-		spl.startTCPPServer("5000");
+		spvm.startUDPServer("4019");
+		spvm.startTCPPServer("4020");
+		StationServer spb = new StationServerImpl(StationType.SPB);
+		spvm.startUDPServer("4021");
+		spvm.startTCPPServer("4022");
+		StationServer spl = new StationServerImpl(StationType.SPL);
+		spvm.startUDPServer("4023");
+		spvm.startTCPPServer("4024");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
 				spvm, spb, spl));
-
-		requestHandler.addCommand("getRecordCounts", new CreateCriminalRecord(
-				spvm, spb, spl));
-
 		replica4.setRequestHandler(requestHandler);
 
 		replica4.start();

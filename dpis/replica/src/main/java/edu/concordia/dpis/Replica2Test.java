@@ -43,23 +43,45 @@ public class Replica2Test {
 		});
 
 		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
-		spvm.startUDPServer("3200");
-		spvm.startTCPPServer("3300");
+		spvm.startUDPServer("4007");
+		spvm.startTCPPServer("4008");
 
 		StationServerImpl spb = new StationServerImpl(StationType.SPB);
-		spb.startUDPServer("3400");
-		spb.startTCPPServer("3500");
+		spb.startUDPServer("4009");
+		spb.startTCPPServer("4010");
 
 		StationServerImpl spl = new StationServerImpl(StationType.SPL);
-		spl.startUDPServer("3600");
-		spl.startTCPPServer("3700");
+		spl.startUDPServer("4011");
+		spl.startTCPPServer("4012");
+
+		spvm.addOtherUDPStationHostNPort(StationType.SPB, "localhost", "4009");
+		spvm.addOtherTCPStationHostNPort(StationType.SPB, "localhost", "4010");
+		spvm.addOtherUDPStationHostNPort(StationType.SPL, "localhost", "4011");
+		spvm.addOtherTCPStationHostNPort(StationType.SPL, "localhost", "4012");
+
+		spb.addOtherUDPStationHostNPort(StationType.SPVM, "localhost", "4007");
+		spb.addOtherTCPStationHostNPort(StationType.SPVM, "localhost", "4008");
+		spb.addOtherUDPStationHostNPort(StationType.SPL, "localhost", "4011");
+		spb.addOtherTCPStationHostNPort(StationType.SPL, "localhost", "4012");
+
+		spl.addOtherUDPStationHostNPort(StationType.SPVM, "localhost", "4007");
+		spl.addOtherTCPStationHostNPort(StationType.SPVM, "localhost", "4008");
+		spl.addOtherUDPStationHostNPort(StationType.SPB, "localhost", "4009");
+		spl.addOtherTCPStationHostNPort(StationType.SPB, "localhost", "4010");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
 				spvm, spb, spl));
 
-		requestHandler.addCommand("getRecordCounts", new CreateCriminalRecord(
+		requestHandler.addCommand("createMRecord", new CreateMissingRecord(
 				spvm, spb, spl));
 
+		requestHandler.addCommand("getRecordCounts", new GetRecordCounts(spvm,
+				spb, spl));
+
+		requestHandler.addCommand("editRecord", new EditRecord(spvm, spb, spl));
+
+		requestHandler.addCommand("transferRecord", new TransferRecord(spvm, spb,
+				spl));
 		replica2.setRequestHandler(requestHandler);
 		replica2.start();
 		replica2.startFailureDetection();

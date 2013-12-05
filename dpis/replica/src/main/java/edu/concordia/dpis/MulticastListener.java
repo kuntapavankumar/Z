@@ -49,7 +49,11 @@ public class MulticastListener {
 								ReliableMessage request = (ReliableMessage) MessageTransformer
 										.deserializeMessage(pack.getData());
 								Message replyMsg = onMessage(request);
-								if (request.isReplyToThisMessage()) {
+								System.out.println("isReply:"
+										+ replyMsg.isReply() + " "
+										+ "isReplyToThisMessage:"
+										+ request.isReplyToThisMessage());
+								if (replyMsg.isReply() && replyMsg.isReplyToThisMessage()) {
 									UDPClient.INSTANCE.send(replyMsg, 3000);
 								}
 							} catch (IOException e) {

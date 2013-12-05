@@ -9,8 +9,8 @@ public abstract class StationCommand implements Command {
 	private StationServer spb;
 	private StationServer spl;
 
-	public StationCommand(StationServer spvm, StationServerImpl spb,
-			StationServerImpl spl) {
+	public StationCommand(StationServer spvm, StationServer spb,
+			StationServer spl) {
 		this.spvm = spvm;
 		this.spb = spb;
 		this.spl = spl;

@@ -2,12 +2,10 @@ package edu.concordia.dpis;
 
 import java.util.List;
 
-import edu.concordia.dpis.stationserver.StationServerImpl;
-
 public class CreateCriminalRecord extends StationCommand {
 
-	public CreateCriminalRecord(StationServer spvm, StationServerImpl spb,
-			StationServerImpl spl) {
+	public CreateCriminalRecord(StationServer spvm, StationServer spb,
+			StationServer spl) {
 		super(spvm, spb, spl);
 	}
 

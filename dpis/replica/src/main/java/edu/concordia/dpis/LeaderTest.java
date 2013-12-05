@@ -29,9 +29,8 @@ public class LeaderTest {
 		ProxyNode replica4 = new ProxyNode(replica4Address);
 		replica4Address.setId("25");
 
-		Replica leader = new Replica(2200, true, 100, frontEndAddress).addNode(
-				replica2).addNode(replica3);
-		// .addNode(replica4);
+		Replica leader = new Replica(2200, true, 100, frontEndAddress)
+				.addNode(replica2).addNode(replica3).addNode(replica4);
 
 		DefaultRequestHandler requestHandler = new DefaultRequestHandler();
 
@@ -44,25 +43,48 @@ public class LeaderTest {
 		});
 
 		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
-		spvm.startUDPServer("2600");
-		spvm.startTCPPServer("2700");
+		spvm.startUDPServer("4001");
+		spvm.startTCPPServer("4002");
 
 		StationServerImpl spb = new StationServerImpl(StationType.SPB);
-		spb.startUDPServer("2800");
-		spb.startTCPPServer("2900");
+		spb.startUDPServer("4003");
+		spb.startTCPPServer("4004");
 
 		StationServerImpl spl = new StationServerImpl(StationType.SPL);
-		spl.startUDPServer("3000");
-		spl.startTCPPServer("3100");
+		spl.startUDPServer("4005");
+		spl.startTCPPServer("4006");
+
+		spvm.addOtherUDPStationHostNPort(StationType.SPB, "localhost", "4003");
+		spvm.addOtherTCPStationHostNPort(StationType.SPB, "localhost", "4004");
+		spvm.addOtherUDPStationHostNPort(StationType.SPL, "localhost", "4005");
+		spvm.addOtherTCPStationHostNPort(StationType.SPL, "localhost", "4006");
+
+		spb.addOtherUDPStationHostNPort(StationType.SPVM, "localhost", "4001");
+		spb.addOtherTCPStationHostNPort(StationType.SPVM, "localhost", "4002");
+		spb.addOtherUDPStationHostNPort(StationType.SPL, "localhost", "4005");
+		spb.addOtherTCPStationHostNPort(StationType.SPL, "localhost", "4006");
+
+		spl.addOtherUDPStationHostNPort(StationType.SPVM, "localhost", "4001");
+		spl.addOtherTCPStationHostNPort(StationType.SPVM, "localhost", "4002");
+		spl.addOtherUDPStationHostNPort(StationType.SPB, "localhost", "4003");
+		spl.addOtherTCPStationHostNPort(StationType.SPB, "localhost", "4004");
 
 		requestHandler.addCommand("createCRecord", new CreateCriminalRecord(
 				spvm, spb, spl));
 
-		requestHandler.addCommand("getRecordCounts", new CreateCriminalRecord(
+		requestHandler.addCommand("createMRecord", new CreateMissingRecord(
 				spvm, spb, spl));
+
+		requestHandler.addCommand("getRecordCounts", new GetRecordCounts(spvm,
+				spb, spl));
+
+		requestHandler.addCommand("editRecord", new EditRecord(spvm, spb, spl));
+
+		requestHandler.addCommand("transferRecord", new TransferRecord(spvm, spb,
+				spl));
 
 		leader.setRequestHandler(requestHandler);
 		leader.start();
-		leader.startFailureDetection();
+//		leader.startFailureDetection();
 	}
 }

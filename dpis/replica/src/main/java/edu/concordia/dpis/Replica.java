@@ -1,7 +1,6 @@
 package edu.concordia.dpis;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.List;
 import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.commons.DeadNodeException;
 import edu.concordia.dpis.commons.Message;
-import edu.concordia.dpis.commons.MessageTransformer;
 import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.commons.TimeoutException;
 import edu.concordia.dpis.fifo.FIFO;
@@ -60,11 +58,13 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 				ReliableMessage reply;
 				System.out.println("Got a multicast message "
 						+ msg.getActualMessage());
+				msg.setMulticast(false);
 				String str = getReplyMessage(msg);
 				reply = new ReliableMessage("SUCCESS", msg.getToAddress()
 						.getHost(), msg.getToAddress().getPort());
 				reply.addArgument(str);
-				reply.setReply(msg.isReply());
+				reply.setReply(true);
+				reply.setReplyToThisMessage(msg.isReplyToThisMessage());
 				reply.setSequenceNumber(msg.getSequenceNumber());
 				return reply;
 			}
