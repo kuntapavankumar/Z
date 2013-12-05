@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// A message 
 public class ReliableMessage implements Message {
 
 	private static final long serialVersionUID = 1L;
 
 	private int sequenceNumber = -1;
 
+	// actual message
 	private String message;
-
+	// destination address
 	private Address toAddress;
-
+	// arguments
 	private ArrayList<Object> args;
-
+	// whether the message has to be multicasted
 	private boolean multicast = false;
-
+	// is this message a reply message
 	private boolean isReply = false;
-
+	// is a reply is essential for this message
 	private boolean replyToThisMessage = true;
 
 	public ReliableMessage(String message, String host, int port) {
