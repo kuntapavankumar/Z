@@ -29,8 +29,9 @@ public class LeaderTest {
 		ProxyNode replica4 = new ProxyNode(replica4Address);
 		replica4Address.setId("25");
 
-		Replica leader = new Replica(2200, true, 100, frontEndAddress)
-				.addNode(replica2).addNode(replica3).addNode(replica4);
+		Replica leader = new Replica(2200, true, 100, frontEndAddress).addNode(
+				replica2).addNode(replica3);
+		// .addNode(replica4);
 
 		DefaultRequestHandler requestHandler = new DefaultRequestHandler();
 

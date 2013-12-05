@@ -13,6 +13,7 @@ import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.MessageTransformer;
 import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.commons.TimeoutException;
+import edu.concordia.dpis.fifo.FIFO;
 import edu.concordia.dpis.messenger.UDPClient;
 import edu.concordia.dpis.messenger.UDPServer;
 
@@ -43,35 +44,31 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 
 	private MulticastListener multicastListener;
 
+	private boolean isElectionInProgress;
+
 	public Replica(int port, int replicaId, Address frontEndAddress)
 			throws UnknownHostException {
 		this(port, false, replicaId, frontEndAddress);
-		multicastListener = new MulticastListener(3000, "230.0.0.1") {
+		multicastListener = getMulticastListener();
+		multicastListener.joinGroup();
+	}
+
+	private MulticastListener getMulticastListener() {
+		return new MulticastListener(3000, "230.0.0.1") {
 			@Override
-			public Message onMessage(DatagramPacket pack) {
-				ReliableMessage msg = null;
+			public Message onMessage(ReliableMessage msg) {
 				ReliableMessage reply;
-				try {
-					msg = (ReliableMessage) MessageTransformer
-							.deserializeMessage(pack.getData());
-					msg.setMulticast(false);
-					String str = getReplyMessage(msg);
-					reply = new ReliableMessage("SUCCESS", msg.getToAddress()
-							.getHost(), msg.getToAddress().getPort());
-					reply.addArgument(str);
-					reply.setReply(true);
-					reply.setSequenceNumber(msg.getSequenceNumber());
-					return reply;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				reply = new ReliableMessage("FAILURE", msg.getToAddress()
+				System.out.println("Got a multicast message "
+						+ msg.getActualMessage());
+				String str = getReplyMessage(msg);
+				reply = new ReliableMessage("SUCCESS", msg.getToAddress()
 						.getHost(), msg.getToAddress().getPort());
+				reply.addArgument(str);
+				reply.setReply(msg.isReply());
 				reply.setSequenceNumber(msg.getSequenceNumber());
 				return reply;
 			}
 		};
-		multicastListener.joinGroup();
 	}
 
 	public Replica(int port, boolean isLeader, int replicaId,
@@ -145,45 +142,50 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	 * in effect immediately.
 	 */
 	public void newLeader(final String name) {
-		int i = 0;
-		for (Node node : nodes) {
-			if (i >= 3) {
-				break;
-			}
-			if (node.isAlive()) {
-				i++;
-			}
-		}
-		System.out.println("Active replicas:" + i);
-		if ((i + 1) < 3) {
-			System.out
-					.println("Leader cannot be elected because there must be atleast 3 replicas alive");
-			return;
-		}
+		//
+		// int i = 0;
+		// for (Node node : nodes) {
+		// if (i >= 3) {
+		// break;
+		// }
+		// if (node.isAlive()) {
+		// i++;
+		// }
+		// }
+		// System.out.println("Active replicas:" + i + 1);
+		// if ((i + 1) < 3) {
+		// System.out
+		// .println("Leader cannot be elected because there must be atleast 3 replicas alive");
+		// return;
+		// }
 
 		this.leaderName = name;
 		System.out.println("Now, the leader is " + name);
 		if (leaderName.equals(this.address.getId())) {
-			if (!multicastListener.isClosed()) {
+			if (multicastListener != null) {
 				multicastListener.leaveGroup();
+				multicastListener = null;
 			}
 			notifyFrontEndTheNewLeader();
-			for (final Node node : nodes) {
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							node.newLeader(name);
-						} catch (DeadNodeException e) {
-							System.out.println(e.getMessage());
-						}
-					}
-				}).start();
-			}
+			multicastNewLeader();
 		} else {
-			if (this.multicastListener.isClosed()) {
+			if (this.multicastListener == null) {
+				this.multicastListener = getMulticastListener();
 				this.multicastListener.joinGroup();
 			}
+		}
+	}
+
+	private void multicastNewLeader() {
+		System.out.println("Sending a multicast message about the newleader");
+		ReliableMessage leaderMsg = new ReliableMessage("newLeader",
+				this.address.getHost(), this.address.getPort());
+		leaderMsg.setReplyToThisMessage(false);
+		leaderMsg.addArgument(this.leaderName);
+		try {
+			FIFO.INSTANCE.multicast(leaderMsg);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -212,25 +214,24 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 	@Override
 	public MessageType election(String replicaId) {
 		System.out.println("election is going to be started by " + replicaId);
-		leaderName = null;
-		if (this.address.getId().compareTo(replicaId) >= 0) {
+		if (Integer.parseInt(this.address.getId()) >= Integer
+				.parseInt(replicaId) && !isElectionInProgress) {
+			leaderName = null;
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					for (final Node node : nodes) {
 						if (leaderName == null) {
 							try {
-								System.out
-										.println("sent election message to node deployed on "
-												+ node.getAddress().getHost()
-												+ " and on port "
-												+ node.getAddress().getPort());
-								if (node.getAddress().getId()
-										.equals(leaderName)) {
-									continue;
-								}
-								if (node.getAddress().getId()
-										.compareTo(address.getId()) >= 0) {
+								if (Integer.parseInt(node.getAddress().getId()) > Integer
+										.parseInt(address.getId())) {
+									System.out
+											.println("sent election message to node deployed on "
+													+ node.getAddress()
+															.getHost()
+													+ " and on port "
+													+ node.getAddress()
+															.getPort());
 									MessageType mType = node.election(address
 											.getId());
 									if (MessageType.COORDINATOR.equals(mType)) {
@@ -268,11 +269,12 @@ public class Replica extends UDPServer implements Node, FrontEndAware {
 					if (leaderName == null) {
 						System.out.println("electing myself as the new leader");
 						newLeader(address.getId());
+						isElectionInProgress = false;
 					}
 				}
 			}).start();
 		} else {
-			// this shouldn't happen
+			System.out.println("Election is already in progress");
 		}
 		return MessageType.OK;
 	}

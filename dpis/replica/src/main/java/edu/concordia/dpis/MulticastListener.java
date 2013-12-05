@@ -7,6 +7,8 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
 import edu.concordia.dpis.commons.Message;
+import edu.concordia.dpis.commons.MessageTransformer;
+import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.commons.TimeoutException;
 import edu.concordia.dpis.messenger.UDPClient;
 
@@ -44,7 +46,12 @@ public class MulticastListener {
 								multicastSocket.receive(pack);
 								System.out
 										.println("received a packet from multisocket in multicastlistener");
-								UDPClient.INSTANCE.send(onMessage(pack), 3000);
+								ReliableMessage request = (ReliableMessage) MessageTransformer
+										.deserializeMessage(pack.getData());
+								Message replyMsg = onMessage(request);
+								if (request.isReplyToThisMessage()) {
+									UDPClient.INSTANCE.send(replyMsg, 3000);
+								}
 							} catch (IOException e) {
 								e.printStackTrace();
 							} catch (TimeoutException e) {
@@ -59,7 +66,7 @@ public class MulticastListener {
 		}
 	}
 
-	public Message onMessage(DatagramPacket pack) {
+	public Message onMessage(ReliableMessage msg) {
 		System.out.println("Got a message from multicast port");
 		return null;
 	}

@@ -16,4 +16,6 @@ public interface Message extends IReliable, Serializable {
 	boolean isMulticast();
 
 	boolean isReply();
+
+	boolean isReplyToThisMessage();
 }

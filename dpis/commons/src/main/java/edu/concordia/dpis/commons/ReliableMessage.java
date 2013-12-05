@@ -20,6 +20,8 @@ public class ReliableMessage implements Message {
 
 	private boolean isReply = false;
 
+	private boolean replyToThisMessage = true;
+
 	public ReliableMessage(String message, String host, int port) {
 		this.message = message;
 		this.toAddress = new Address(host, port);
@@ -69,4 +71,13 @@ public class ReliableMessage implements Message {
 	public void setReply(boolean isReply) {
 		this.isReply = isReply;
 	}
+
+	public void setReplyToThisMessage(boolean replyToThisMessage) {
+		this.replyToThisMessage = replyToThisMessage;
+	}
+
+	public boolean isReplyToThisMessage() {
+		return replyToThisMessage;
+	}
+
 }

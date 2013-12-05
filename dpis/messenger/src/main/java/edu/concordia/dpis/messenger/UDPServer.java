@@ -25,8 +25,8 @@ public abstract class UDPServer {
 					while (true) {
 						try {
 							byte[] buffer = new byte[1000];
-							final DatagramPacket request = new DatagramPacket(buffer,
-									buffer.length);
+							final DatagramPacket request = new DatagramPacket(
+									buffer, buffer.length);
 							aSocket.receive(request);
 
 							new Thread(new Runnable() {
@@ -34,20 +34,23 @@ public abstract class UDPServer {
 								@Override
 								public void run() {
 									try {
-										byte[] payload = getReplyMessage(
-												MessageTransformer
-														.deserializeMessage(request
-																.getData()))
-												.getBytes("US-ASCII");
-										DatagramPacket reply = new DatagramPacket(
-												payload, payload.length,
-												request.getAddress(), request
-														.getPort());
-										aSocket.send(reply);
+										Message msg = MessageTransformer
+												.deserializeMessage(request
+														.getData());
+										String output = getReplyMessage(msg);
+										if (msg.isReplyToThisMessage()) {
+											byte[] payload = output
+													.getBytes("US-ASCII");
+											DatagramPacket reply = new DatagramPacket(
+													payload, payload.length,
+													request.getAddress(),
+													request.getPort());
+											aSocket.send(reply);
+										}
+
 									} catch (Exception ex) {
 										ex.printStackTrace();
 									}
-
 								}
 
 							}).start();
