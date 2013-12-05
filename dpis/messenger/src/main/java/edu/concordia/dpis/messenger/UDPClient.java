@@ -14,6 +14,7 @@ import edu.concordia.dpis.commons.MessageTransformer;
 import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.commons.TimeoutException;
 
+// UPD CLIENT to send messages over udp
 public class UDPClient implements Imessenger {
 
 	public static final UDPClient INSTANCE = new UDPClient();

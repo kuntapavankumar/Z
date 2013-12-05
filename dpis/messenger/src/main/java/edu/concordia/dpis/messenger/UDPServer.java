@@ -4,11 +4,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-import org.apache.log4j.Logger;
-
 import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.MessageTransformer;
 
+// UDP SERVER
 public abstract class UDPServer {
 	private DatagramSocket aSocket = null;
 	private final int port;
