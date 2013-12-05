@@ -1,8 +1,8 @@
 package edu.concordia.dpis;
 
-import edu.concordia.dpis.stationserver.StationServerImpl;
 import edu.concordia.dpis.stationserver.domain.StationType;
 
+// A station command specific to the stationserver application
 public abstract class StationCommand implements Command {
 
 	private StationServer spvm;

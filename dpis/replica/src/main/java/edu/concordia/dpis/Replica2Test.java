@@ -7,6 +7,7 @@ import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.stationserver.StationServerImpl;
 import edu.concordia.dpis.stationserver.domain.StationType;
 
+// Instantiates Replica 2 
 public class Replica2Test {
 
 	public static void main(String[] args) throws UnknownHostException {
@@ -80,8 +81,8 @@ public class Replica2Test {
 
 		requestHandler.addCommand("editRecord", new EditRecord(spvm, spb, spl));
 
-		requestHandler.addCommand("transferRecord", new TransferRecord(spvm, spb,
-				spl));
+		requestHandler.addCommand("transferRecord", new TransferRecord(spvm,
+				spb, spl));
 		replica2.setRequestHandler(requestHandler);
 		replica2.start();
 		replica2.startFailureDetection();

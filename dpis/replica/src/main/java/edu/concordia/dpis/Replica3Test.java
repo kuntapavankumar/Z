@@ -7,6 +7,7 @@ import edu.concordia.dpis.commons.Address;
 import edu.concordia.dpis.stationserver.StationServerImpl;
 import edu.concordia.dpis.stationserver.domain.StationType;
 
+// Instantiates Replica 3 
 public class Replica3Test {
 
 	public static void main(String[] args) throws UnknownHostException {

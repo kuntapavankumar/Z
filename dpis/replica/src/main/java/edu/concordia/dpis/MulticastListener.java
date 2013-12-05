@@ -12,14 +12,16 @@ import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.commons.TimeoutException;
 import edu.concordia.dpis.messenger.UDPClient;
 
+// A group subscriber
 public class MulticastListener {
 
+	// listen port
 	private int port;
-
+	// listen group ip
 	private String group;
-
+	// socket
 	private MulticastSocket multicastSocket;
-
+	// is unsubscribed
 	private boolean isClosed = true;
 
 	public MulticastListener(int port, String group) {
@@ -27,6 +29,7 @@ public class MulticastListener {
 		this.group = group;
 	}
 
+	// subscribe to the group
 	public void joinGroup() {
 		try {
 			this.multicastSocket = new MulticastSocket(port);
@@ -37,23 +40,25 @@ public class MulticastListener {
 				@Override
 				public void run() {
 					System.out.println("multicast listener getting ready...");
+					// listen for the messages continuosly
 					while (true) {
 						if (!multicastSocket.isClosed()) {
 							byte buf[] = new byte[1024];
 							DatagramPacket pack = new DatagramPacket(buf,
 									buf.length);
 							try {
+								// listen
 								multicastSocket.receive(pack);
 								System.out
 										.println("received a packet from multisocket in multicastlistener");
+								// unmarshal the request message
 								ReliableMessage request = (ReliableMessage) MessageTransformer
 										.deserializeMessage(pack.getData());
+								// handle the request message
 								Message replyMsg = onMessage(request);
-								System.out.println("isReply:"
-										+ replyMsg.isReply() + " "
-										+ "isReplyToThisMessage:"
-										+ request.isReplyToThisMessage());
-								if (replyMsg.isReply() && replyMsg.isReplyToThisMessage()) {
+								// if this message needs to be replied back
+								if (replyMsg.isReply()
+										&& replyMsg.isReplyToThisMessage()) {
 									UDPClient.INSTANCE.send(replyMsg, 3000);
 								}
 							} catch (IOException e) {
@@ -75,6 +80,7 @@ public class MulticastListener {
 		return null;
 	}
 
+	// unsubscribe from the group
 	public void leaveGroup() {
 		try {
 			this.multicastSocket.leaveGroup(InetAddress.getByName(group));

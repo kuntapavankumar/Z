@@ -6,6 +6,7 @@ import edu.concordia.dpis.commons.Message;
 import edu.concordia.dpis.commons.ReliableMessage;
 import edu.concordia.dpis.messenger.UDPClient;
 
+// A proxy working on behalf of a remote node, simply delegates the request over UDP to the actual node
 public class ProxyNode implements Node {
 
 	private Address address;
