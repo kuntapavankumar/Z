@@ -60,3 +60,23 @@
 18:56:08,825-main--DEBUG-SPL:SPL:UDPServer started on port[4017]
 18:56:08,825-main--DEBUG-SPL:SPL:TCPServer started on port[4018]
 18:56:11,302-main--INFO -SPL:Longueuil initialized!
+19:32:00,369-main--INFO -SPL:Longueuil initialized!
+19:32:00,370-main--DEBUG-SPL:SPL:UDPServer started on port[4005]
+19:32:00,370-main--DEBUG-SPL:SPL:TCPServer started on port[4006]
+19:32:04,580-main--INFO -SPL:Longueuil initialized!
+19:32:04,580-main--DEBUG-SPL:SPL:UDPServer started on port[4011]
+19:32:04,581-main--DEBUG-SPL:SPL:TCPServer started on port[4012]
+19:32:08,059-main--INFO -SPL:Longueuil initialized!
+19:32:08,060-main--DEBUG-SPL:SPL:UDPServer started on port[4017]
+19:32:08,061-main--DEBUG-SPL:SPL:TCPServer started on port[4018]
+19:32:10,528-main--INFO -SPL:Longueuil initialized!
+19:33:45,130-main--INFO -SPL:Longueuil initialized!
+19:33:45,130-main--DEBUG-SPL:SPL:UDPServer started on port[4005]
+19:33:45,131-main--DEBUG-SPL:SPL:TCPServer started on port[4006]
+19:33:49,439-main--INFO -SPL:Longueuil initialized!
+19:33:49,440-main--DEBUG-SPL:SPL:UDPServer started on port[4011]
+19:33:49,440-main--DEBUG-SPL:SPL:TCPServer started on port[4012]
+19:33:51,529-main--INFO -SPL:Longueuil initialized!
+19:33:51,529-main--DEBUG-SPL:SPL:UDPServer started on port[4017]
+19:33:51,530-main--DEBUG-SPL:SPL:TCPServer started on port[4018]
+19:33:53,928-main--INFO -SPL:Longueuil initialized!

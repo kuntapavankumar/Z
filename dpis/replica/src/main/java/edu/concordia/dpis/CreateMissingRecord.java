@@ -7,8 +7,8 @@ import edu.concordia.dpis.stationserver.StationServerImpl;
 public class CreateMissingRecord extends StationCommand {
 
 	// constructor
-	public CreateMissingRecord(StationServer spvm, StationServerImpl spb,
-			StationServerImpl spl) {
+	public CreateMissingRecord(StationServer spvm, StationServer spb,
+			StationServer spl) {
 		super(spvm, spb, spl);
 	}
 

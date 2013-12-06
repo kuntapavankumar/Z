@@ -99,9 +99,11 @@ public class DefaultRequestHandler implements RequestHandler {
 
 	// finds the best possible solution out of all the replies
 	private Object getAResponse(List<ReliableMessage> list) {
+
 		System.out.println("I got a total of " + list.size() + " messages");
 		HashMap<Object, Integer> results = new HashMap<Object, Integer>();
 		for (Message msg : list) {
+			System.out.println("Reply:" + msg.getArguments().get(0));
 			if ("SUCCESS".equalsIgnoreCase(msg.getActualMessage())) {
 				Object result = msg.getArguments().get(0);
 				if (results.get(result) != null) {

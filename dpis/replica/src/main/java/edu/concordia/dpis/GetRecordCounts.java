@@ -8,8 +8,8 @@ import edu.concordia.dpis.stationserver.StationServerImpl;
 public class GetRecordCounts extends StationCommand {
 
 	// constructor
-	public GetRecordCounts(StationServer spvm, StationServerImpl spb,
-			StationServerImpl spl) {
+	public GetRecordCounts(StationServer spvm, StationServer spb,
+			StationServer spl) {
 		super(spvm, spb, spl);
 	}
 

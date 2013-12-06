@@ -69,3 +69,23 @@
 18:56:08,824-main--DEBUG-SPB:SPB:UDPServer started on port[4015]
 18:56:08,824-main--DEBUG-SPB:SPB:TCPServer started on port[4016]
 18:56:11,301-main--INFO -SPB:Brossard initialized!
+19:32:00,368-main--INFO -SPB:Brossard initialized!
+19:32:00,369-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+19:32:00,369-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+19:32:04,579-main--INFO -SPB:Brossard initialized!
+19:32:04,579-main--DEBUG-SPB:SPB:UDPServer started on port[4009]
+19:32:04,580-main--DEBUG-SPB:SPB:TCPServer started on port[4010]
+19:32:08,058-main--INFO -SPB:Brossard initialized!
+19:32:08,059-main--DEBUG-SPB:SPB:UDPServer started on port[4015]
+19:32:08,059-main--DEBUG-SPB:SPB:TCPServer started on port[4016]
+19:32:10,527-main--INFO -SPB:Brossard initialized!
+19:33:45,129-main--INFO -SPB:Brossard initialized!
+19:33:45,129-main--DEBUG-SPB:SPB:UDPServer started on port[4003]
+19:33:45,129-main--DEBUG-SPB:SPB:TCPServer started on port[4004]
+19:33:49,438-main--INFO -SPB:Brossard initialized!
+19:33:49,439-main--DEBUG-SPB:SPB:UDPServer started on port[4009]
+19:33:49,439-main--DEBUG-SPB:SPB:TCPServer started on port[4010]
+19:33:51,528-main--INFO -SPB:Brossard initialized!
+19:33:51,528-main--DEBUG-SPB:SPB:UDPServer started on port[4015]
+19:33:51,529-main--DEBUG-SPB:SPB:TCPServer started on port[4016]
+19:33:53,927-main--INFO -SPB:Brossard initialized!

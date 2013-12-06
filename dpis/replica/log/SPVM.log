@@ -340,3 +340,69 @@ n records
 18:56:11,302-main--DEBUG-SPVM:SPVM:TCPServer started on port[4022]
 18:56:11,302-main--DEBUG-SPVM:SPVM:UDPServer started on port[4023]
 18:56:11,303-main--DEBUG-SPVM:SPVM:TCPServer started on port[4024]
+19:32:00,363-main--INFO -SPVM:Montreal initialized!
+19:32:00,367-main--DEBUG-SPVM:SPVM:UDPServer started on port[4001]
+19:32:00,368-main--DEBUG-SPVM:SPVM:TCPServer started on port[4002]
+19:32:04,573-main--INFO -SPVM:Montreal initialized!
+19:32:04,577-main--DEBUG-SPVM:SPVM:UDPServer started on port[4007]
+19:32:04,578-main--DEBUG-SPVM:SPVM:TCPServer started on port[4008]
+19:32:08,053-main--INFO -SPVM:Montreal initialized!
+19:32:08,057-main--DEBUG-SPVM:SPVM:UDPServer started on port[4013]
+19:32:08,058-main--DEBUG-SPVM:SPVM:TCPServer started on port[4014]
+19:32:10,507-main--INFO -SPVM:Montreal initialized!
+19:32:10,520-main--DEBUG-SPVM:SPVM:UDPServer started on port[4019]
+19:32:10,527-main--DEBUG-SPVM:SPVM:TCPServer started on port[4020]
+19:32:10,527-main--DEBUG-SPVM:SPVM:UDPServer started on port[4021]
+19:32:10,527-main--DEBUG-SPVM:SPVM:TCPServer started on port[4022]
+19:32:10,528-main--DEBUG-SPVM:SPVM:UDPServer started on port[4023]
+19:32:10,529-main--DEBUG-SPVM:SPVM:TCPServer started on port[4024]
+19:32:26,569-Thread-10--DEBUG-SPVM:SPVM1111 initiated createCRecord
+19:32:26,570-Thread-0--DEBUG-SPVM:SPVM1111 initiated createCRecord
+19:32:26,570-Thread-0--DEBUG-SPVM:SPVM1111 initiated createCRecord
+19:32:26,577-Thread-0--DEBUG-SPVM:SPVM:Successfully created Criminal Record
+19:32:26,579-Thread-0--DEBUG-SPVM:SPVM:Successfully created Criminal Record
+19:32:26,584-Thread-10--DEBUG-SPVM:SPVM:Successfully created Criminal Record
+19:33:45,123-main--INFO -SPVM:Montreal initialized!
+19:33:45,127-main--DEBUG-SPVM:SPVM:UDPServer started on port[4001]
+19:33:45,128-main--DEBUG-SPVM:SPVM:TCPServer started on port[4002]
+19:33:49,433-main--INFO -SPVM:Montreal initialized!
+19:33:49,437-main--DEBUG-SPVM:SPVM:UDPServer started on port[4007]
+19:33:49,438-main--DEBUG-SPVM:SPVM:TCPServer started on port[4008]
+19:33:51,523-main--INFO -SPVM:Montreal initialized!
+19:33:51,527-main--DEBUG-SPVM:SPVM:UDPServer started on port[4013]
+19:33:51,528-main--DEBUG-SPVM:SPVM:TCPServer started on port[4014]
+19:33:53,922-main--INFO -SPVM:Montreal initialized!
+19:33:53,925-main--DEBUG-SPVM:SPVM:UDPServer started on port[4019]
+19:33:53,927-main--DEBUG-SPVM:SPVM:TCPServer started on port[4020]
+19:33:53,927-main--DEBUG-SPVM:SPVM:UDPServer started on port[4021]
+19:33:53,928-main--DEBUG-SPVM:SPVM:TCPServer started on port[4022]
+19:33:53,929-main--DEBUG-SPVM:SPVM:UDPServer started on port[4023]
+19:33:53,929-main--DEBUG-SPVM:SPVM:TCPServer started on port[4024]
+19:34:15,810-Thread-10--DEBUG-SPVM:SPVM1111 initiated createCRecord
+19:34:15,811-Thread-0--DEBUG-SPVM:SPVM1111 initiated createCRecord
+19:34:15,815-Thread-0--DEBUG-SPVM:SPVM1111 initiated createCRecord
+19:34:15,817-Thread-0--DEBUG-SPVM:SPVM:Successfully created Criminal Record
+19:34:15,820-Thread-0--DEBUG-SPVM:SPVM:Successfully created Criminal Record
+19:34:15,822-Thread-10--DEBUG-SPVM:SPVM:Successfully created Criminal Record
+19:34:19,832-Thread-0--DEBUG-SPVM:SPVM:Running getRecordCounts
+19:34:19,832-Thread-0--DEBUG-SPVM:SPVM:Running getRecordCounts
+19:34:19,831-Thread-14--DEBUG-SPVM:SPVM:Running getRecordCounts
+19:34:19,833-Thread-0--DEBUG-SPVM:SPVM:Pinging localhoston port 4009
+19:34:19,834-Thread-0--DEBUG-SPVM:SPVM:UDPClient reuested for number of records
+4-Thread-14--DEBUG-SPVM:SPVM:Pinging localhoston port 4003
+19:34:19,835-Thread-0--DEBUG-SPVM:SPVM:UDPClient reuested for number of records
+19:34:19,836-Thread-0--DEBUG-SPVM:SPVM:UDPServer replied
+19:34:19,836-Thread-0--DEBUG-SPVM:SPVM:Pinging localhoston port 4017
+19:34:19,837-Thread-0--DEBUG-SPVM:SPVM:Pinging localhoston port 4011
+19:34:19,837-Thread-0--DEBUG-SPVM:SPVM:UDPClient reuested for number of records
+19:34:19,837-Thread-0--DEBUG-SPVM:SPVM:UDPClient reuested for number of records
+19:34:19,838-Thread-0--DEBUG-SPVM:SPVM:UDPServer replied
+19:34:19,838-Thread-0--DEBUG-SPVM:SPVM:UDPServer replied
+19:34:19,838-Thread-14--DEBUG-SPVM:SPVM:UDPClient reuested for number of records
+19:34:19,838-Thread-0--DEBUG-SPVM:SPVM:counting this station records
+19:34:19,838-Thread-0--DEBUG-SPVM:SPVM:counting this station records
+19:34:19,838-Thread-14--DEBUG-SPVM:SPVM:UDPServer replied
+19:34:19,839-Thread-14--DEBUG-SPVM:SPVM:Pinging localhoston port 4005
+19:34:19,839-Thread-14--DEBUG-SPVM:SPVM:UDPClient reuested for number of records
+19:34:19,840-Thread-14--DEBUG-SPVM:SPVM:UDPServer replied
+19:34:19,840-Thread-14--DEBUG-SPVM:SPVM:counting this station records

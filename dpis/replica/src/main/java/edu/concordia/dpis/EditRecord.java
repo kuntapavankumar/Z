@@ -8,8 +8,7 @@ import edu.concordia.dpis.stationserver.StationServerImpl;
 public class EditRecord extends StationCommand {
 
 	// constructor
-	public EditRecord(StationServer spvm, StationServerImpl spb,
-			StationServerImpl spl) {
+	public EditRecord(StationServer spvm, StationServer spb, StationServer spl) {
 		super(spvm, spb, spl);
 	}
 

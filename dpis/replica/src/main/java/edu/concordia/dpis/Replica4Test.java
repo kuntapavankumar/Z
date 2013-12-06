@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 import edu.concordia.dpis.commons.Address;
+import edu.concordia.dpis.stationserver.FaultyStationServerImpl;
 import edu.concordia.dpis.stationserver.StationServerImpl;
 import edu.concordia.dpis.stationserver.domain.StationType;
 
@@ -43,13 +44,16 @@ public class Replica4Test {
 			}
 		});
 
-		StationServerImpl spvm = new StationServerImpl(StationType.SPVM);
+		FaultyStationServerImpl spvm = new FaultyStationServerImpl(
+				StationType.SPVM);
 		spvm.startUDPServer("4019");
 		spvm.startTCPPServer("4020");
-		StationServerImpl spb = new StationServerImpl(StationType.SPB);
+		FaultyStationServerImpl spb = new FaultyStationServerImpl(
+				StationType.SPB);
 		spvm.startUDPServer("4021");
 		spvm.startTCPPServer("4022");
-		StationServerImpl spl = new StationServerImpl(StationType.SPL);
+		FaultyStationServerImpl spl = new FaultyStationServerImpl(
+				StationType.SPL);
 		spvm.startUDPServer("4023");
 		spvm.startTCPPServer("4024");
 

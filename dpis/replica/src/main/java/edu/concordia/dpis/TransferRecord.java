@@ -2,13 +2,11 @@ package edu.concordia.dpis;
 
 import java.util.List;
 
-import edu.concordia.dpis.stationserver.StationServerImpl;
-
 //  A command object which can transfer a record from one station to other
 public class TransferRecord extends StationCommand {
 
-	public TransferRecord(StationServer spvm, StationServerImpl spb,
-			StationServerImpl spl) {
+	public TransferRecord(StationServer spvm, StationServer spb,
+			StationServer spl) {
 		super(spvm, spb, spl);
 	}
 
